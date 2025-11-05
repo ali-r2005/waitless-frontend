@@ -31,7 +31,7 @@ export default function Home() {
           </p>
           <div className="flex gap-4 mt-4">
             <Button size="lg" asChild>
-              <Link href="/register">
+              <Link href="/auth/register">
                 Get Started Free
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
@@ -223,7 +223,7 @@ export default function Home() {
             </CardDescription>
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
               <Button size="lg" asChild>
-                <Link href="/register">
+                <Link href="/auth/register">
                   Start Free Trial
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>

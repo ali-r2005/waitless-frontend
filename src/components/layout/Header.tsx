@@ -46,10 +46,10 @@ export default function Header() {
         <div className="flex items-center gap-4">
           <ModeToggle />
           <Button variant="ghost" asChild className="hidden md:inline-flex">
-            <Link href="/login">Login</Link>
+            <Link href="/auth/login">Login</Link>
           </Button>
           <Button asChild>
-            <Link href="/register">Get Started</Link>
+            <Link href="/auth/register">Get Started</Link>
           </Button>
         </div>
       </div>
