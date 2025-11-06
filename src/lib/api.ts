@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import { getToken, removeToken } from "./token";
+import { getToken, setToken } from "./token";
 import { logout } from "@/store/useAuthStore"; // avoid circular import - see note
 
 export function createApi(baseURL: string): AxiosInstance {
@@ -25,17 +25,38 @@ export function createApi(baseURL: string): AxiosInstance {
     (res) => res,
     async (error) => {
       const status = error?.response?.status;
-      // If 401 you can attempt refresh token here if your backend supports it
-      if (status === 401) {
-        // fallback: remove token & force logout
-        removeToken();
-        // call logout action in store (importing here is okay if you export a function)
+      const originalRequest = error.config;
+      
+      // If 401 and not already retried, attempt refresh token
+      if (status === 401 && !originalRequest._retry) {
+        originalRequest._retry = true;
+        
         try {
-          // optional: trigger an app-wide logout action
-          // If circular import is problematic, rework to use an event emitter or set a window flag.
+          // Attempt to refresh the token
+          const refreshRes = await instance.post("/api/refresh");
+          const newToken = refreshRes.data.access_token;
+          
+          // Save new token
+          setToken(newToken);
+          
+          // Update the failed request with new token
+          originalRequest.headers.Authorization = `Bearer ${newToken}`;
+          
+          // Retry the original request
+          return instance(originalRequest);
+        } catch (refreshError) {
+          // Refresh failed - logout user
           logout();
-        } catch {}
+          return Promise.reject(refreshError);
+        }
       }
+      
+      // If 401 and already retried, or refresh endpoint itself failed
+      if (status === 401) {
+        logout();
+      }
+      
+      // For all other errors, just reject without logging out
       return Promise.reject(error);
     }
   );

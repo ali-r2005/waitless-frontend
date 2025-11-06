@@ -1,8 +1,18 @@
+
+"use client"
 import RegisterForm from "@/components/auth/RegisterForm"
 import { Clock } from "lucide-react"
 import Link from "next/link"
+import { useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { useAuthStore } from "@/store/useAuthStore"
 
 export default function RegisterPage() {
+  const token = useAuthStore((s) => s.token);
+  const router = useRouter();
+  useEffect(() => {
+    if (token) router.push("/dashboard");
+  }, [token, router]);
   return (
     <div className="flex min-h-screen items-center justify-center bg-muted/50 p-4">
       <div className="flex w-full max-w-2xl flex-col items-center gap-8 py-8">
