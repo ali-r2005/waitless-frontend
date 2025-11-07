@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export type Role = {
+export type buisnessRole = {
     id: number;
     name: string;
     created_at: string;
@@ -8,7 +8,7 @@ export type Role = {
 }
 
 export type RoleResponse = {
-    data: Role[];
+    data: buisnessRole[];
     pagination: {
         current_page: number;
         last_page: number;

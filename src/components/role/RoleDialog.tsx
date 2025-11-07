@@ -4,7 +4,7 @@ import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { toast } from "sonner"
-import { roleSchema, RoleInput, Role } from "@/types/role"
+import { roleSchema, RoleInput, buisnessRole } from "@/types/role"
 import { useCreateRole } from "@/hooks/role/useCreateRole"
 import { useUpdateRole } from "@/hooks/role/useUpdateRole"
 import { Button } from "@/components/ui/button"
@@ -30,7 +30,7 @@ import { Loader2 } from "lucide-react"
 interface RoleDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  role?: Role | null
+  role?: buisnessRole | null
 }
 
 export function RoleDialog({ open, onOpenChange, role }: RoleDialogProps) {

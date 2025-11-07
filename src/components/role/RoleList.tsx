@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Role } from "@/types/role"
+import { buisnessRole } from "@/types/role"
 import { useDeleteRole } from "@/hooks/role/useDeleteRole"
 import { Button } from "@/components/ui/button"
 import {
@@ -18,15 +18,15 @@ import { Edit, Trash2, Plus, Shield } from "lucide-react"
 import { toast } from "sonner"
 
 interface RoleListProps {
-  roles: Role[]
+  roles: buisnessRole[]
 }
 
 export function RoleList({ roles }: RoleListProps) {
   const [dialogOpen, setDialogOpen] = useState(false)
-  const [selectedRole, setSelectedRole] = useState<Role | null>(null)
+  const [selectedRole, setSelectedRole] = useState<buisnessRole | null>(null)
   const { mutate: deleteRole } = useDeleteRole()
 
-  const handleEdit = (role: Role) => {
+  const handleEdit = (role: buisnessRole) => {
     setSelectedRole(role)
     setDialogOpen(true)
   }
