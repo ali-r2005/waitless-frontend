@@ -25,7 +25,15 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Loader2 } from "lucide-react"
+import { useBranches } from "@/hooks/branch/useBranches"
 
 interface BranchDialogProps {
   open: boolean
@@ -36,7 +44,28 @@ interface BranchDialogProps {
 export function BranchDialog({ open, onOpenChange, branch }: BranchDialogProps) {
   const { mutate: createBranch, isPending: isCreating } = useCreateBranch()
   const { mutate: updateBranch, isPending: isUpdating } = useUpdateBranch()
+  const { data: branches } = useBranches()
   const isPending = isCreating || isUpdating
+
+  // Get all child branches (direct and nested) to exclude from parent selection
+  const getChildBranchIds = (parentId: number): number[] => {
+    if (!branches) return []
+    const children = branches.filter(b => b.parent_id === parentId)
+    const childIds = children.map(c => c.id)
+    // Recursively get nested children
+    children.forEach(child => {
+      childIds.push(...getChildBranchIds(child.id))
+    })
+    return childIds
+  }
+
+  // Filter branches that can be selected as parent
+  const availableParentBranches = branches?.filter((b) => {
+    if (!branch) return true // When creating, all branches are available
+    if (b.id === branch.id) return false // Can't be parent of itself
+    const childIds = getChildBranchIds(branch.id)
+    return !childIds.includes(b.id) // Exclude all child branches
+  })
 
   const form = useForm<BranchInput>({
     resolver: zodResolver(branchSchema),
@@ -51,12 +80,13 @@ export function BranchDialog({ open, onOpenChange, branch }: BranchDialogProps) 
       form.reset({
         name: branch.name,
         address: branch.address,
-        // parent_id: branch.parent_id,
+        parent_id: branch.parent_id,
       })
     } else {
       form.reset({
         name: "",
         address: "",
+        parent_id: undefined,
       })
     }
   }, [branch, form])
@@ -128,6 +158,35 @@ export function BranchDialog({ open, onOpenChange, branch }: BranchDialogProps) 
                   <FormControl>
                     <Input placeholder="123 Main St, City, State" {...field} value={field.value || ""} />
                   </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="parent_id"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Parent Branch (Optional)</FormLabel>
+                  <Select
+                    onValueChange={(value) => field.onChange(value === "none" ? undefined : Number(value))}
+                    value={field.value?.toString() || "none"}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a parent branch" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="none">None</SelectItem>
+                      {availableParentBranches?.map((b) => (
+                        <SelectItem key={b.id} value={b.id.toString()}>
+                          {b.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}

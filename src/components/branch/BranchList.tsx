@@ -14,7 +14,8 @@ import {
 } from "@/components/ui/table"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { BranchDialog } from "./BranchDialog"
-import { Edit, Trash2, Plus, MapPin } from "lucide-react"
+import { BranchHierarchyDialog } from "./BranchHierarchyDialog"
+import { Edit, Trash2, Plus, MapPin, GitBranch } from "lucide-react"
 import { toast } from "sonner"
 
 interface BranchListProps {
@@ -23,6 +24,7 @@ interface BranchListProps {
 
 export function BranchList({ branches }: BranchListProps) {
   const [dialogOpen, setDialogOpen] = useState(false)
+  const [hierarchyDialogOpen, setHierarchyDialogOpen] = useState(false)
   const [selectedBranch, setSelectedBranch] = useState<Branch | null>(null)
   const { mutate: deleteBranch } = useDeleteBranch()
 
@@ -52,6 +54,18 @@ export function BranchList({ branches }: BranchListProps) {
 
   const handleDialogClose = (open: boolean) => {
     setDialogOpen(open)
+    if (!open) {
+      setSelectedBranch(null)
+    }
+  }
+
+  const handleViewHierarchy = (branch: Branch) => {
+    setSelectedBranch(branch)
+    setHierarchyDialogOpen(true)
+  }
+
+  const handleHierarchyDialogClose = (open: boolean) => {
+    setHierarchyDialogOpen(open)
     if (!open) {
       setSelectedBranch(null)
     }
@@ -109,6 +123,14 @@ export function BranchList({ branches }: BranchListProps) {
                         <Button
                           variant="outline"
                           size="sm"
+                          onClick={() => handleViewHierarchy(branch)}
+                          title="View hierarchy"
+                        >
+                          <GitBranch className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
                           onClick={() => handleEdit(branch)}
                         >
                           <Edit className="h-4 w-4" />
@@ -135,6 +157,15 @@ export function BranchList({ branches }: BranchListProps) {
         onOpenChange={handleDialogClose}
         branch={selectedBranch}
       />
+
+      {selectedBranch && (
+        <BranchHierarchyDialog
+          open={hierarchyDialogOpen}
+          onOpenChange={handleHierarchyDialogClose}
+          branch={selectedBranch}
+          allBranches={branches}
+        />
+      )}
     </>
   )
 }
