@@ -85,8 +85,8 @@ export default function RegisterForm() {
         toast.success("Registration successful!")
         router.push("/dashboard")
       },
-      onError: (error: Error) => {
-        const errorMessage = error?.message || "Registration failed. Please try again."
+      onError: (error: any) => {
+        const errorMessage = error?.response?.data.message || "Registration failed. Please try again."
         toast.error(errorMessage)
       },
     })
@@ -104,8 +104,8 @@ export default function RegisterForm() {
         toast.success("Registration successful!")
         router.push("/dashboard")
       },
-      onError: (error: Error) => {
-        const errorMessage = error?.message || "Registration failed. Please try again."
+      onError: (error: any) => {
+        const errorMessage = error?.response?.data.message || "Registration failed. Please try again."
         toast.error(errorMessage)
       },
     })

@@ -24,12 +24,12 @@ export function createApi(baseURL: string): AxiosInstance {
   instance.interceptors.response.use(
     (res) => res,
     async (error) => {
+      console.log("error", error)
       const status = error?.response?.status;
-      const originalRequest = error.config;
       
       // If 401 and not already retried, attempt refresh token
-      if (status === 401 && !originalRequest._retry) {
-        originalRequest._retry = true;
+      if (status === 401 && error.config._retry) {
+        error.config._retry = false;
         
         try {
           // Attempt to refresh the token
@@ -40,10 +40,10 @@ export function createApi(baseURL: string): AxiosInstance {
           setToken(newToken);
           
           // Update the failed request with new token
-          originalRequest.headers.Authorization = `Bearer ${newToken}`;
+          error.config.headers.Authorization = `Bearer ${newToken}`;
           
           // Retry the original request
-          return instance(originalRequest);
+          return instance(error.config);
         } catch (refreshError) {
           // Refresh failed - logout user
           logout();

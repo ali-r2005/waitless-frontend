@@ -39,8 +39,8 @@ export default function LoginForm() {
         toast.success("Login successful!")
         router.push("/dashboard")
       },
-      onError: (error: Error) => {
-        const errorMessages = error.message || "Login failed. Please try again."
+      onError: (error: any) => {
+        const errorMessages = error?.response?.data.message || "Login failed. Please try again."
         toast.error(errorMessages)
       },
     })

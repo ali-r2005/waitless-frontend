@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import { setToken as saveTokenToStorage, removeToken } from "@/lib/token";
+import { AuthService } from "@/services/auth/auth.service";
 
 type User = { id: string; name: string; email: string } | null;
 
@@ -33,6 +34,7 @@ export const useAuthStore = create<AuthState>()(
 
 // helper exported for api.ts to call on 401 without circular imports:
 export function logout() {
+  // AuthService.logout();
   const store = useAuthStore.getState();
   store.clearAuth();
 }

@@ -52,4 +52,8 @@ export const AuthService = {
     return res.data; // { user }
   },
   
+  logout: async () => {
+    await serviceA.post("/api/logout");
+  },
+  
 };
