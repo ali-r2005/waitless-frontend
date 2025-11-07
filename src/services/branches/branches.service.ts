@@ -3,10 +3,9 @@ import { AxiosResponse } from "axios";
 import { Branch, BranchForm, BranchResponse,  } from "@/types/branch";
 
 export const BranchService = {
-    index: async (): Promise<Branch[]> => {
-        const res = await serviceA.get<BranchResponse>("/api/branches");
-        console.log("branches", res.data.data);
-        return res.data.data;
+    index: async (page: number = 1): Promise<BranchResponse> => {
+        const res = await serviceA.get<BranchResponse>("/api/branches?page=" + page);
+        return res.data;
     },
     store: async (branch: BranchForm) => {
         const res: AxiosResponse<{ branch: Branch }> = await serviceA.post("/api/branches", branch);

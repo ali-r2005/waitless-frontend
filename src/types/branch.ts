@@ -11,6 +11,12 @@ export type Branch = {
 
 export type BranchResponse = {
     data: Branch[];
+    pagination: {
+        current_page: number;
+        last_page: number;
+        per_page: number;
+        total: number;
+    }
 }
 
 export type BranchForm = {

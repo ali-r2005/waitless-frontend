@@ -44,12 +44,14 @@ interface BranchDialogProps {
 export function BranchDialog({ open, onOpenChange, branch }: BranchDialogProps) {
   const { mutate: createBranch, isPending: isCreating } = useCreateBranch()
   const { mutate: updateBranch, isPending: isUpdating } = useUpdateBranch()
-  const { data: branches } = useBranches()
+  const { data: branchesResponse } = useBranches()
   const isPending = isCreating || isUpdating
+
+  const branches = branchesResponse?.data || []
 
   // Get all child branches (direct and nested) to exclude from parent selection
   const getChildBranchIds = (parentId: number): number[] => {
-    if (!branches) return []
+    if (!branches.length) return []
     const children = branches.filter(b => b.parent_id === parentId)
     const childIds = children.map(c => c.id)
     // Recursively get nested children
@@ -60,7 +62,7 @@ export function BranchDialog({ open, onOpenChange, branch }: BranchDialogProps) 
   }
 
   // Filter branches that can be selected as parent
-  const availableParentBranches = branches?.filter((b) => {
+  const availableParentBranches = branches.filter((b) => {
     if (!branch) return true // When creating, all branches are available
     if (b.id === branch.id) return false // Can't be parent of itself
     const childIds = getChildBranchIds(branch.id)

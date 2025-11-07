@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { BranchService } from "@/services/branches/branches.service";
 
-export function useBranches() {
+export function useBranches(page: number = 1) {
   return useQuery({
-    queryKey: ["branches"],
-    queryFn: BranchService.index,
+    queryKey: ["branches", page],
+    queryFn: () => BranchService.index(page),
   });
 }
