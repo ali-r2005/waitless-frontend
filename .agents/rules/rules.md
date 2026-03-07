@@ -2,17 +2,34 @@
 trigger: always_on
 ---
 
+
 All features must respect this folder structure:
 
 src/
- ├─ app/
- ├─ components/
- ├─ hooks/
- ├─ services/
- ├─ store/
- ├─ types/
- └─ lib/
-
+│
+├── app/
+│   └── projects/
+│       └── page.tsx
+│
+├── features/
+│   └── projects/
+│       ├── components/
+│       │   ├── ProjectCard.tsx
+│       │   ├── ProjectList.tsx
+│       │   └── CreateProjectForm.tsx
+│       │
+│       ├── hooks/
+│       │   └── useProjects.ts
+│       │
+│       ├── services/
+│       │   └── projects.api.ts
+│       ├── state/
+│       ├── types.ts
+│
+├── store/       
+│
+├── lib/
+│   └── api-client.ts
 
 Any new global state → add a Zustand store in src/store/
 
