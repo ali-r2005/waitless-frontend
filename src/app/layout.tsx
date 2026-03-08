@@ -18,7 +18,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Waitless - Modern Queue Management System",
-  description: "Streamline your business operations with Waitless. Manage queues efficiently for hospitals, clinics, and service centers.",
+  description:
+    "Streamline your business operations with Waitless. Manage queues efficiently for hospitals, clinics, and service centers.",
 };
 
 export default function RootLayout({
@@ -31,19 +32,19 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="system"
-        enableSystem
-        disableTransitionOnChange
-      >
-        <div className="flex min-h-screen flex-col">
-          <Header />
-          <main className="flex-1">{children}</main>
-          <Footer />
-        </div>
-      </ThemeProvider>
-      <Toaster />  
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <div className="flex min-h-screen flex-col">
+            <Header />
+            <main className="flex-1">{children}</main>
+            <Footer />
+          </div>
+        </ThemeProvider>
+        <Toaster />
       </body>
     </html>
   );

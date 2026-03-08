@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import ModeToggle from "@/components/shared/mode-toggle"
-import { Clock } from "lucide-react"
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import ModeToggle from "@/components/shared/mode-toggle";
+import { Clock } from "lucide-react";
 
 export default function Header() {
   return (
@@ -17,26 +17,26 @@ export default function Header() {
         </div>
 
         <nav className="hidden md:flex items-center gap-6">
-          <Link 
-            href="#features" 
+          <Link
+            href="#features"
             className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
           >
             Features
           </Link>
-          <Link 
-            href="#how-it-works" 
+          <Link
+            href="#how-it-works"
             className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
           >
             How It Works
           </Link>
-          <Link 
-            href="#pricing" 
+          <Link
+            href="#pricing"
             className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
           >
             Pricing
           </Link>
-          <Link 
-            href="#contact" 
+          <Link
+            href="#contact"
             className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
           >
             Contact
@@ -54,5 +54,5 @@ export default function Header() {
         </div>
       </div>
     </header>
-  )
+  );
 }

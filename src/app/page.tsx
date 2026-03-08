@@ -1,18 +1,23 @@
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { 
-  Clock, 
-  Users, 
-  BarChart3, 
-  Bell, 
-  Shield, 
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Clock,
+  Users,
+  BarChart3,
+  Bell,
+  Shield,
   Zap,
   ArrowRight,
   Building2,
   Stethoscope,
-  Store
-} from "lucide-react"
+  Store,
+} from "lucide-react";
 
 export default function Home() {
   return (
@@ -26,8 +31,9 @@ export default function Home() {
             <span className="text-primary">Enhance Customer Experience</span>
           </h1>
           <p className="max-w-[750px] text-lg text-muted-foreground sm:text-xl">
-            Modern queue management system designed for hospitals, clinics, and service centers. 
-            Streamline operations and keep your customers informed in real-time.
+            Modern queue management system designed for hospitals, clinics, and
+            service centers. Streamline operations and keep your customers
+            informed in real-time.
           </p>
           <div className="flex gap-4 mt-4">
             <Button size="lg" asChild>
@@ -50,7 +56,8 @@ export default function Home() {
             Everything You Need to Manage Queues
           </h2>
           <p className="max-w-[750px] text-lg text-muted-foreground">
-            Powerful features designed to optimize your workflow and improve customer satisfaction
+            Powerful features designed to optimize your workflow and improve
+            customer satisfaction
           </p>
         </div>
 
@@ -60,7 +67,8 @@ export default function Home() {
               <Clock className="h-10 w-10 text-primary mb-2" />
               <CardTitle>Real-Time Updates</CardTitle>
               <CardDescription>
-                Keep customers informed with live queue status and estimated wait times
+                Keep customers informed with live queue status and estimated
+                wait times
               </CardDescription>
             </CardHeader>
           </Card>
@@ -70,7 +78,8 @@ export default function Home() {
               <Users className="h-10 w-10 text-primary mb-2" />
               <CardTitle>Smart Queue Management</CardTitle>
               <CardDescription>
-                Efficiently organize and prioritize customers based on service type and urgency
+                Efficiently organize and prioritize customers based on service
+                type and urgency
               </CardDescription>
             </CardHeader>
           </Card>
@@ -80,7 +89,8 @@ export default function Home() {
               <Bell className="h-10 w-10 text-primary mb-2" />
               <CardTitle>SMS & Push Notifications</CardTitle>
               <CardDescription>
-                Automatic alerts when it&apos;s almost time for customer&apos;s turn
+                Automatic alerts when it&apos;s almost time for customer&apos;s
+                turn
               </CardDescription>
             </CardHeader>
           </Card>
@@ -136,7 +146,8 @@ export default function Home() {
               </div>
               <CardTitle>Healthcare</CardTitle>
               <CardDescription>
-                Hospitals, clinics, and medical centers managing patient flow efficiently
+                Hospitals, clinics, and medical centers managing patient flow
+                efficiently
               </CardDescription>
             </CardHeader>
           </Card>
@@ -160,7 +171,8 @@ export default function Home() {
               </div>
               <CardTitle>Retail & Services</CardTitle>
               <CardDescription>
-                Banks, retail stores, and service providers enhancing customer experience
+                Banks, retail stores, and service providers enhancing customer
+                experience
               </CardDescription>
             </CardHeader>
           </Card>
@@ -168,7 +180,10 @@ export default function Home() {
       </section>
 
       {/* How It Works Section */}
-      <section id="how-it-works" className="container py-20 md:py-24 bg-muted/50">
+      <section
+        id="how-it-works"
+        className="container py-20 md:py-24 bg-muted/50"
+      >
         <div className="mx-auto flex max-w-[980px] flex-col items-center gap-4 text-center mb-12">
           <h2 className="text-3xl font-bold leading-tight tracking-tighter md:text-5xl">
             How It Works
@@ -219,7 +234,8 @@ export default function Home() {
               Ready to Transform Your Queue Management?
             </CardTitle>
             <CardDescription className="text-lg">
-              Join hundreds of businesses already using Waitless to improve their operations
+              Join hundreds of businesses already using Waitless to improve
+              their operations
             </CardDescription>
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
               <Button size="lg" asChild>
@@ -236,5 +252,5 @@ export default function Home() {
         </Card>
       </section>
     </div>
-  )
+  );
 }

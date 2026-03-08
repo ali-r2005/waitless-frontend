@@ -1,5 +1,5 @@
-import Link from "next/link"
-import { Clock } from "lucide-react"
+import Link from "next/link";
+import { Clock } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -20,17 +20,26 @@ export default function Footer() {
             <h3 className="mb-4 text-sm font-semibold">Product</h3>
             <ul className="space-y-3 text-sm">
               <li>
-                <Link href="#features" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link
+                  href="#features"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
                   Features
                 </Link>
               </li>
               <li>
-                <Link href="#pricing" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link
+                  href="#pricing"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
                   Pricing
                 </Link>
               </li>
               <li>
-                <Link href="#how-it-works" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link
+                  href="#how-it-works"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
                   How It Works
                 </Link>
               </li>
@@ -41,17 +50,26 @@ export default function Footer() {
             <h3 className="mb-4 text-sm font-semibold">Company</h3>
             <ul className="space-y-3 text-sm">
               <li>
-                <Link href="#about" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link
+                  href="#about"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
                   About Us
                 </Link>
               </li>
               <li>
-                <Link href="#contact" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link
+                  href="#contact"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
                   Contact
                 </Link>
               </li>
               <li>
-                <Link href="#careers" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link
+                  href="#careers"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
                   Careers
                 </Link>
               </li>
@@ -62,12 +80,18 @@ export default function Footer() {
             <h3 className="mb-4 text-sm font-semibold">Legal</h3>
             <ul className="space-y-3 text-sm">
               <li>
-                <Link href="#privacy" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link
+                  href="#privacy"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="#terms" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link
+                  href="#terms"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
                   Terms of Service
                 </Link>
               </li>
@@ -76,9 +100,11 @@ export default function Footer() {
         </div>
 
         <div className="mt-8 border-t pt-8 text-center text-sm text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} Waitless. All rights reserved.</p>
+          <p>
+            &copy; {new Date().getFullYear()} Waitless. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>
-  )
+  );
 }
