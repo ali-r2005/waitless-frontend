@@ -41,6 +41,8 @@ export default function RegisterForm() {
       // If business_owner, passing these as well (mapping based on interface)
       ...(data.role === 'business_owner' ? {
         industry: data.industry!,
+        business_name: data.business_name!,
+        logo: data.logo!,
         // We might want to pass business name separately or if the API expects it in 'name'
         // But since we used 'name' for user name, let's see. 
         // For now, I'll follow the user's intent.
@@ -117,6 +119,7 @@ export default function RegisterForm() {
                 />
                 {errors.business_name && <p className="text-sm text-red-500">{errors.business_name.message}</p>}
               </div>
+
               <div className="space-y-2">
                 <label className="text-sm font-medium leading-none">Industry</label>
                 <Input
@@ -126,7 +129,24 @@ export default function RegisterForm() {
                 />
                 {errors.industry && <p className="text-sm text-red-500">{errors.industry.message}</p>}
               </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium leading-none">Business Logo</label>
+                <Input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      setValue('logo', file);
+                    }
+                  }}
+                  className={errors.logo ? 'border-red-500' : ''}
+                />
+                {errors.logo && <p className="text-sm text-red-500">{(errors.logo as any).message}</p>}
+              </div>
             </TabsContent>
+
 
             <div className="space-y-2">
               <label className="text-sm font-medium leading-none">Password</label>

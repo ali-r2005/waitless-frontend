@@ -8,9 +8,26 @@ export const authApi = {
   },
 
   async register(data: AuthRequest) {
-    const response = await api.post("/register", data);
+    const formData = new FormData();
+    console.log('i just created the form data object');
+
+    // Append all fields dynamically
+    Object.entries(data).forEach(([key, value]) => {
+      if (value === undefined || value === null) return;
+      
+      if (value instanceof File) {
+        formData.append(key, value); // File handled natively
+      } else {
+        formData.append(key, String(value));
+      }
+    });
+
+    const response = await api.post("/register", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    console.log('response from api', response);
     return response.data;
-  },
+},
 
   async logout() {
     const response = await api.post("/logout");

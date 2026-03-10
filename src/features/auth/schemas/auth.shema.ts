@@ -10,6 +10,7 @@ export const registerSchema = z.object({
   // Business fields (only required if role is business_owner)
   business_name: z.string().optional(),
   industry: z.string().optional(),
+  logo: z.instanceof(File).optional(),
 }).refine((data) => data.password === data.password_confirmation, {
   message: "Passwords don't match",
   path: ["password_confirmation"],

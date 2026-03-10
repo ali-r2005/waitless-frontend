@@ -36,6 +36,7 @@ export const useAuth = () => {
             router.push("/projects");
         },
         onError: (error: any) => {
+            console.error('error', error);
             const message = error.response?.data?.message || "Registration failed";
             toast.error(message);
         },
@@ -58,6 +59,7 @@ export const useAuth = () => {
             await loginMutation.mutateAsync({ email, password });
         },
         register: async (data: AuthRequest) => {
+            console.log('data', data);
             await registerMutation.mutateAsync(data);
         },
         logout: async () => {
