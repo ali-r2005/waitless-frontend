@@ -8,15 +8,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import Link from 'next/link';
+import { loginSchema, LoginFormValues } from '../schemas/auth.shema';
 
-const loginSchema = z.object({
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
-});
-
-type LoginFormValues = z.infer<typeof loginSchema>;
-
-export const LoginForm = () => {
+export default function LoginForm() {
   const { login, loading } = useAuth();
   const {
     register,
@@ -27,7 +21,7 @@ export const LoginForm = () => {
   });
 
   const onSubmit = async (data: LoginFormValues) => {
-    await login(data.email, data.password);
+    await login({email: data.email, password: data.password});
   };
 
   return (
