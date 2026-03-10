@@ -2,7 +2,6 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
 import { useAuth } from '../hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -11,33 +10,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Link from 'next/link';
 import { AuthRequest } from '../types';
 import { useState } from 'react';
+import { registerSchema, RegisterFormValues } from '../schemas/auth.shema';
 
-const registerSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
-  email: z.string().email('Invalid email address'),
-  phone: z.string().optional(),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
-  password_confirmation: z.string().min(6, 'Please confirm your password'),
-  role: z.enum(['customer', 'business_owner']),
-  // Business fields (only required if role is business_owner)
-  business_name: z.string().optional(),
-  industry: z.string().optional(),
-}).refine((data) => data.password === data.password_confirmation, {
-  message: "Passwords don't match",
-  path: ["password_confirmation"],
-}).refine((data) => {
-  if (data.role === 'business_owner') {
-    return !!data.business_name && !!data.industry;
-  }
-  return true;
-}, {
-  message: "Business name and industry are required for business owners",
-  path: ["business_name"],
-});
 
-type RegisterFormValues = z.infer<typeof registerSchema>;
-
-export const RegisterForm = () => {
+export default function RegisterForm() {
   const { register: registerUser, loading } = useAuth();
   const [activeTab, setActiveTab] = useState<'customer' | 'business_owner'>('customer');
   
