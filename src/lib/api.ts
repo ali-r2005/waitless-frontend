@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useAuthStore } from "@/store/useAuthStore";
 
 const API_BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}/api`;
 
@@ -25,6 +26,9 @@ api.interceptors.response.use(
     if (error.response.status === 401) {
       //remove the token from localStorage
       localStorage.removeItem("token");
+      //redirect to login page
+      window.location.href = "/auth/login";
+      useAuthStore.setState({ user: null, token: null, isAuthenticated: false });
     }
     return Promise.reject(error);
   }

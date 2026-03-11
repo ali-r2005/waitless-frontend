@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Trash2, Loader2 } from "lucide-react";
+import { AlertDialogDestructive } from "@/components/shared/destructive-confirm";
 
 export const StaffList = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -65,23 +66,24 @@ export const StaffList = () => {
                       <span className="font-medium">{member.name}</span>
                       <span className="text-sm text-muted-foreground">{member.email}</span>
                     </div>
-                    <Button 
-                      size="icon" 
-                      variant="ghost" 
-                      className="text-destructive opacity-0 group-hover:opacity-100 transition-opacity"
-                      onClick={() => {
-                        if (window.confirm(`Are you sure you want to remove ${member.name}?`)) {
-                          deleteMutation.mutate(member.id);
-                        }
-                      }}
-                      disabled={deleteMutation.isPending}
+                    <AlertDialogDestructive 
+                      title="Remove Staff Member" 
+                      description={`Are you sure you want to remove ${member.name}?`}
+                      onAction={() => deleteMutation.mutate(member.id)}
                     >
-                      {deleteMutation.isPending ? (
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                      ) : (
-                        <Trash2 className="h-4 w-4" />
-                      )}
-                    </Button>
+                      <Button 
+                        size="icon" 
+                        variant="ghost" 
+                        className="text-destructive opacity-0 group-hover:opacity-100 transition-opacity"
+                        disabled={deleteMutation.isPending}
+                      >
+                        {deleteMutation.isPending ? (
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                          <Trash2 className="h-4 w-4" />
+                        )}
+                      </Button>
+                    </AlertDialogDestructive>
                   </li>
                 ))
               ) : (
