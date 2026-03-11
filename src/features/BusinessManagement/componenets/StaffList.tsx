@@ -77,7 +77,7 @@ export const StaffList = () => {
                         className="text-destructive opacity-0 group-hover:opacity-100 transition-opacity"
                         disabled={deleteMutation.isPending}
                       >
-                        {deleteMutation.isPending ? (
+                        { member.id == deleteMutation.variables && deleteMutation.isPending ? (
                           <Loader2 className="h-4 w-4 animate-spin" />
                         ) : (
                           <Trash2 className="h-4 w-4" />

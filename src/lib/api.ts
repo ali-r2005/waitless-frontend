@@ -24,11 +24,9 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response.status === 401) {
-      //remove the token from localStorage
-      localStorage.removeItem("token");
-      //redirect to login page
+      useAuthStore.getState().clearAuth();
       window.location.href = "/auth/login";
-      useAuthStore.setState({ user: null, token: null, isAuthenticated: false });
+
     }
     return Promise.reject(error);
   }

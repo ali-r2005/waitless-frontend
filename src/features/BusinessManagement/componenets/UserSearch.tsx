@@ -28,7 +28,7 @@ export const UserSearch = () => {
     },
   });
 
-  const { data,isError,error, isLoading, isFetching } = useQuery({
+  const { data, isError, error, isLoading, isFetching } = useQuery({
     queryKey: ["userSearch", debouncedSearch],
     queryFn: () => staffApi.searchUser(debouncedSearch),
     enabled: debouncedSearch.length >= 2, // Only search if at least 2 characters
@@ -94,7 +94,7 @@ export const UserSearch = () => {
                     onClick={() => addUserMutation.mutate(user.id)}
                     disabled={addUserMutation.isPending}
                   >
-                    {addUserMutation.isPending ? (
+                    { user.id == addUserMutation.variables &&  addUserMutation.isPending ? (
                       <Loader2 className="h-4 w-4 animate-spin" />
                     ) : (
                       <>
