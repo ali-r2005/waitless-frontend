@@ -12,5 +12,5 @@ export interface PaginationMeta {
 export interface ApiResponse<T> {
   status: string;
   data: T;
-  pagination: PaginationMeta;
+  pagination?: PaginationMeta;
 }

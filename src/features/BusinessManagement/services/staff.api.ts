@@ -12,5 +12,10 @@ export const staffApi = {
     });
     return response.data;
   },
+
+  searchUser: async (query: string) => {
+    const response = await api.get<ApiResponse<User[]>>("/users/search", {params: {name: query}});
+    return response.data;
+  },
 }
     

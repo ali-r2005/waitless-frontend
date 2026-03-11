@@ -1,9 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { staffApi } from "../services/staff.api";
-import {  PaginationMeta } from "../types";
-import { User } from "@/types";
 import { Button } from "@/components/ui/button"; // Assuming Shadcn UI
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
