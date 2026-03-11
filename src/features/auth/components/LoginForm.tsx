@@ -21,7 +21,7 @@ export default function LoginForm() {
   });
 
   const onSubmit = async (data: LoginFormValues) => {
-    await login({email: data.email, password: data.password});
+    await login(data);
   };
 
   return (

@@ -16,13 +16,14 @@ export const useAuth = () => {
     mutationFn: authApi.login,
 
     onSuccess: (data) => {
-      const { user, token } = data;
+      const token = data.access_token;
+      const user = data.user;
 
       setAuth(user, token);
       localStorage.setItem("token", token);
 
       toast.success("Welcome back!");
-      router.push("/projects");
+      // router.push("/projects");
     },
 
     onError: (error: any) => {
@@ -35,13 +36,15 @@ export const useAuth = () => {
     mutationFn: authApi.register,
 
     onSuccess: (data) => {
-      const { user, token } = data;
+      console.log("data of the register mutation", data);
+      const token = data.access_token;
+      const user = data.user;
 
       setAuth(user, token);
       localStorage.setItem("token", token);
 
       toast.success("Account created successfully!");
-      router.push("/projects");
+      router.push("/profile");
     },
 
     onError: (error: any) => {
