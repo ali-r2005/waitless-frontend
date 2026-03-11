@@ -1,5 +1,6 @@
 import api from "@/lib/api";
 import { AuthRequest } from "../types";
+import { User } from "@/types";
 
 export const authApi = {
   async login(data: { email: string, password: string }) {
@@ -36,7 +37,7 @@ export const authApi = {
 
   async me() {
     const response = await api.get("/user");
-    return response.data;
+    return response.data as User;
   },
 
 };
