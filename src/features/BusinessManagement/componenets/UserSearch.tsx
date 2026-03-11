@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { staffApi } from "../services/staff.api";
 import { useDebounce } from "@/hooks/useDebounce";
 import { Input } from "@/components/ui/input";
@@ -14,6 +14,19 @@ import { User } from "@/types";
 export const UserSearch = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearch = useDebounce(searchTerm, 500);
+  const queryClient = useQueryClient();
+
+  const addUserMutation = useMutation({
+    mutationFn: (userId: number) => staffApi.addUserToStaff(userId.toString()),
+    onSuccess: () => {
+      toast.success("User added to staff successfully");
+      setSearchTerm("");
+      queryClient.invalidateQueries({ queryKey: ["staffs"] });
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message || "Failed to add user to staff");
+    },
+  });
 
   const { data,isError,error, isLoading, isFetching } = useQuery({
     queryKey: ["userSearch", debouncedSearch],
@@ -75,9 +88,20 @@ export const UserSearch = () => {
                       {user.email}
                     </span>
                   </div>
-                  <Button size="sm" variant="ghost">
-                    <UserPlus className="h-4 w-4 mr-2" />
-                    Add
+                  <Button 
+                    size="sm" 
+                    variant="ghost" 
+                    onClick={() => addUserMutation.mutate(user.id)}
+                    disabled={addUserMutation.isPending}
+                  >
+                    {addUserMutation.isPending ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <>
+                        <UserPlus className="h-4 w-4 mr-2" />
+                        Add
+                      </>
+                    )}
                   </Button>
                 </li>
               ))}

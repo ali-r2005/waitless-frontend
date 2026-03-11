@@ -4,8 +4,10 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import ModeToggle from "@/components/shared/mode-toggle";
 import { Clock } from "lucide-react";
+import { useAuthStore } from "@/store/useAuthStore";
 
 export default function Header() {
+  const {user , isAuthenticated} = useAuthStore();
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
@@ -51,6 +53,16 @@ export default function Header() {
           <Button asChild>
             <Link href="/register">Get Started</Link>
           </Button>
+          {
+            isAuthenticated && (
+              <>
+              <Button variant="ghost" asChild className="hidden md:inline-flex">
+                <Link href="/dashboard">Dashboard</Link>
+              </Button>
+              <p>{user?.name}</p>
+              </>
+            )
+          }
         </div>
       </div>
     </header>

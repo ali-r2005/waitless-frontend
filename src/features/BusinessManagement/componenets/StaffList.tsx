@@ -4,15 +4,29 @@ import { useState } from "react";
 import { staffApi } from "../services/staff.api";
 import { Button } from "@/components/ui/button"; // Assuming Shadcn UI
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { Trash2, Loader2 } from "lucide-react";
 
 export const StaffList = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
+  const queryClient = useQueryClient();
+
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['staff', currentPage],
+    queryKey: ['staffs', currentPage],
     queryFn: () => staffApi.getStaff(currentPage),
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (userId: number) => staffApi.deleteStaff(userId.toString()),
+    onSuccess: () => {
+      toast.success("Staff member removed successfully");
+      queryClient.invalidateQueries({ queryKey: ["staffs"] });
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message || "Failed to remove staff member");
+    },
   });
 
   const staff = data?.data || [];
@@ -46,9 +60,28 @@ export const StaffList = () => {
             <ul className="divide-y border rounded-md">
               {staff.length > 0 ? (
                 staff.map((member) => (
-                  <li key={member.id} className="p-3 flex justify-between">
-                    <span>{member.name}</span>
-                    <span className="text-muted-foreground">{member.email}</span>
+                  <li key={member.id} className="p-3 flex justify-between items-center group">
+                    <div className="flex flex-col">
+                      <span className="font-medium">{member.name}</span>
+                      <span className="text-sm text-muted-foreground">{member.email}</span>
+                    </div>
+                    <Button 
+                      size="icon" 
+                      variant="ghost" 
+                      className="text-destructive opacity-0 group-hover:opacity-100 transition-opacity"
+                      onClick={() => {
+                        if (window.confirm(`Are you sure you want to remove ${member.name}?`)) {
+                          deleteMutation.mutate(member.id);
+                        }
+                      }}
+                      disabled={deleteMutation.isPending}
+                    >
+                      {deleteMutation.isPending ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <Trash2 className="h-4 w-4" />
+                      )}
+                    </Button>
                   </li>
                 ))
               ) : (

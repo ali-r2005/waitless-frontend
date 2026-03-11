@@ -17,5 +17,16 @@ export const staffApi = {
     const response = await api.get<ApiResponse<User[]>>("/users/search", {params: {name: query}});
     return response.data;
   },
+
+  addUserToStaff: async (userId: string) => {
+    const response = await api.post(`/staff/${userId}`);
+    return response.data;
+  },
+
+  deleteStaff: async (userId: string) => {
+    const response = await api.delete(`/staff/${userId}`);
+    return response.data;
+  }
+
 }
     
