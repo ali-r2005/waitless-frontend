@@ -19,13 +19,26 @@ export default function AuthLayout({
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check if user is already authenticated
-    if (isAuthenticated) {
-      router.replace("/profile");
-    } else {
-      setIsLoading(false);
+    // 1. Manually check the storage because Zustand state might still be 'false' at this exact moment (hydration)
+    const rawStorage = localStorage.getItem('auth-storage-v1');
+    
+    if (rawStorage) {
+      try {
+        const parsed = JSON.parse(rawStorage);
+        // parsed.state contains your Zustand fields
+        if (parsed.state?.isAuthenticated) {
+          router.replace("/profile");
+          return; // Stop here and keep isLoading as true to avoid flickering
+        }
+      } catch (e) {
+        console.error("Error parsing auth storage", e);
+      }
     }
-  }, [isAuthenticated, router]);
+
+    // 2. If we get here, no authenticated session was found in storage
+    setIsLoading(false);
+  }, [router]);
+
 
   // Show a premium loading state while verifying authentication status
   // or while the redirect is in progress

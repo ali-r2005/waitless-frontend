@@ -1,6 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { authApi } from "../services/auth.api";
-import { AuthRequest } from "../types";
 import { useAuthStore } from "@/store/useAuthStore";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -23,7 +22,7 @@ export const useAuth = () => {
       localStorage.setItem("token", token);
 
       toast.success("Welcome back!");
-      // router.push("/projects");
+      router.push("/profile");
     },
 
     onError: (error: any) => {

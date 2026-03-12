@@ -26,7 +26,6 @@ api.interceptors.response.use(
     if (error.response.status === 401) {
       useAuthStore.getState().clearAuth();
       window.location.href = "/auth/login";
-
     }
     return Promise.reject(error);
   }
