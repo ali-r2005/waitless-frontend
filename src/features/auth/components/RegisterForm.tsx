@@ -171,7 +171,7 @@ export default function RegisterForm() {
             </div>
           </CardContent>
           
-          <CardFooter className="flex flex-col gap-4">
+          <CardFooter className="flex flex-col gap-4 py-6">
             <Button type="submit" disabled={loading} className="w-full">
               {loading ? 'Creating account...' : 'Create Account'}
             </Button>

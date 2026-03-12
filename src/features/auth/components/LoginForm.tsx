@@ -57,7 +57,7 @@ export default function LoginForm() {
             {errors.password && <p className="text-sm text-red-500">{errors.password.message}</p>}
           </div>
         </CardContent>
-        <CardFooter className="flex flex-col gap-4">
+        <CardFooter className="flex flex-col gap-4 py-6">
           <Button type="submit" disabled={loading} className="w-full">
             {loading ? 'Logging in...' : 'Login'}
           </Button>
