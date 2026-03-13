@@ -4,11 +4,7 @@ export interface Businesse {
     logo?: File;
 }
 
-export enum Role {
-    BUSINESS_OWNER = 'business_owner',
-    STAFF = 'staff',
-    CUSTOMER = 'customer'
-}
+export type Role = 'business_owner' | 'staff' | 'customer';
 
 export interface User {
     id: number;

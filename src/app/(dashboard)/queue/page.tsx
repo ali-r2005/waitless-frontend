@@ -7,10 +7,13 @@ import { UpdateQueue } from "@/features/QueueManagement/components/UpdateQueue";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Plus } from "lucide-react";
+import { useRequireRole } from "@/hooks/useRequireRole";
 
 export default function QueueManagementPage() {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [editQueueId, setEditQueueId] = useState<number | null>(null);
+
+  useRequireRole(["staff", "business_owner"]);
 
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">

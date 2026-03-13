@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "./useAuth";
 import { Role } from "@/types";
 
-export function useRequireRole(requiredRole: Role | Role[]) {
+export function useRequireRole(requiredRole: Role[]) {
   const { isAuthenticated, user, isLoading } = useAuth(); // already handles unauthenticated redirect
   const router = useRouter();
 

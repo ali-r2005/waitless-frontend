@@ -2,10 +2,9 @@
 import { StaffList } from "@/features/BusinessManagement/componenets/StaffList";
 import { UserSearch } from "@/features/BusinessManagement/componenets/UserSearch";
 import { useRequireRole } from "@/hooks/useRequireRole";
-import { Role } from "@/types";
 
 export default function StaffPage() {
-  useRequireRole(Role.BUSINESS_OWNER);
+  useRequireRole(['business_owner']);
   return (
     <div className="container mx-auto py-8 px-4 space-y-8">
       <div className="flex flex-col gap-2">
