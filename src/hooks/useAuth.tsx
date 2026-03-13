@@ -11,6 +11,7 @@ export function useAuth() {
   const router = useRouter();
 
   useEffect(() => {
+    if (isLoading) return;
     if (!isAuthenticated) {
       router.replace("/login");
     }

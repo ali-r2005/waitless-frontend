@@ -12,7 +12,7 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
 } from "@/components/ui/sidebar"
-import { Home, Users, Clock } from "lucide-react"
+import { Home, Users, Clock, ListOrdered } from "lucide-react"
 import Link from "next/link"
 
 // Menu items.
@@ -27,7 +27,13 @@ const items = [
     url: "/staff",
     icon: Users,
   },
+  {
+    title: "Queues",
+    url: "/queue",
+    icon: ListOrdered,
+  },
 ]
+
 
 export function AppSidebar() {
   return (
