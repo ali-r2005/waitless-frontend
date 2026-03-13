@@ -4,7 +4,7 @@ export interface Businesse {
     logo?: File;
 }
 
-enum Role {
+export enum Role {
     BUSINESS_OWNER = 'business_owner',
     STAFF = 'staff',
     CUSTOMER = 'customer'
