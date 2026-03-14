@@ -1,5 +1,6 @@
 'use client';
 import { useParams } from 'next/navigation';
+import CustomersQueueList from '@/features/QueueManagement/components/CustomersQueueList';
 
 export default function QueuePage() {
   const params = useParams();
@@ -7,8 +8,7 @@ export default function QueuePage() {
 
   return (
     <div>
-      <h1>Queue ID: {queueId}</h1>
-      
+      <CustomersQueueList queueId={queueId as string} />
     </div>
   );
 }

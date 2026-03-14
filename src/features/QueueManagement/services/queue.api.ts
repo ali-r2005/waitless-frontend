@@ -1,5 +1,5 @@
 import api from "@/lib/api";
-import { CreateQueueRequest, ApiResponse, Queue} from "../types";
+import { CreateQueueRequest, ApiResponse, Queue, CustomerQueue} from "../types";
 
 export const queueApi = {
     createQueue: async (data: CreateQueueRequest) => {
@@ -20,6 +20,11 @@ export const queueApi = {
     },
     deleteQueue: async (id: number) => {
         const response = await api.delete(`/queues/${id}`);
+        return response.data;
+    },
+
+    getCustomersQueue: async (queueId: string | number) => {
+        const response = await api.get<ApiResponse<CustomerQueue[]>>(`/queues/${queueId}/users`);
         return response.data;
     }
 }
