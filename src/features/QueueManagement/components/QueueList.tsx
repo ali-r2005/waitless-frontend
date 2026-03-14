@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { queueApi } from "../services/queue.api";
 import { Button } from "@/components/ui/button";
@@ -16,6 +17,7 @@ interface QueueListProps {
 export const QueueList = ({ onEdit }: QueueListProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['queues', currentPage],
@@ -62,7 +64,11 @@ export const QueueList = ({ onEdit }: QueueListProps) => {
             <ul className="divide-y border rounded-md">
               {queues.length > 0 ? (
                 queues.map((queue) => (
-                  <li key={queue.id} className="p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center group">
+                  <li 
+                    key={queue.id} 
+                    className="p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center group cursor-pointer hover:bg-muted/50 transition-colors"
+                    onClick={() => router.push(`/queue/${queue.id}`)}
+                  >
                     <div className="flex flex-col mb-2 sm:mb-0">
                       <span className="font-semibold text-base flex items-center gap-2">
                         {queue.name}
@@ -77,11 +83,17 @@ export const QueueList = ({ onEdit }: QueueListProps) => {
                       </span>
                     </div>
                     
-                    <div className="flex items-center gap-2 sm:opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div 
+                      className="flex items-center gap-2 sm:opacity-0 group-hover:opacity-100 transition-opacity"
+                      onClick={(e) => e.stopPropagation()}
+                    >
                       <Button 
                         size="icon" 
                         variant="ghost" 
-                        onClick={() => onEdit(queue.id)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onEdit(queue.id);
+                        }}
                       >
                         <Edit2 className="h-4 w-4" />
                       </Button>
