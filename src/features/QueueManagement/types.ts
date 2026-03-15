@@ -27,11 +27,6 @@ export interface CustomerQueue {
     name: string;
     email: string;
     phone: string;
-    role: string;
-    business_id: number | null;
-    email_verified_at: string;
-    created_at: string;
-    updated_at: string;
     pivot: {
         queue_id: number;
         user_id: number;
