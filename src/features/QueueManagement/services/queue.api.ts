@@ -23,8 +23,18 @@ export const queueApi = {
         return response.data;
     },
 
-    getCustomersQueue: async (queueId: string | number) => {
-        const response = await api.get<ApiResponse<CustomerQueue[]>>(`/queues/${queueId}/users`);
+    getCustomersQueue: async (queueId: string | number, isLate: boolean = false) => {
+        const response = await api.get<ApiResponse<CustomerQueue[]>>(`/queues/${queueId}/users`, ...(isLate ? [{params: {status : 'late'}}] : []));
+        return response.data;
+    },
+
+    removeCustomer: async (queueId: string | number, userId: number) => {
+        const response = await api.delete(`/queues/${queueId}/users/${userId}`);
+        return response.data;
+    },
+
+    markAsLate: async (queueId: string | number, userId: number) => {
+        const response = await api.patch(`/queues/${queueId}/users/${userId}/late`);
         return response.data;
     }
 }
