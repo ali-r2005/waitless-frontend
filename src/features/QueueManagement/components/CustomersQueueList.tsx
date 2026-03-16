@@ -13,7 +13,7 @@ import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { CustomersQueueTable } from "./CustomersQueueTable";
 
-export default function CustomersQueueList({ queueId }: { queueId: string | number }) {
+export default function CustomersQueueList({ queueId }: { queueId: number }) {
     const [activeTab, setActiveTab] = useState("waiting");
     const queryClient = useQueryClient();
 

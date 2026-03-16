@@ -10,21 +10,32 @@ import { Loader2, Search, UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { User } from "@/types";
+import { queueApi } from "@/features/QueueManagement/services/queue.api";
 
-export const UserSearch = () => {
+export const UserSearch = ({ action, queueId, onSuccess }:{ action : 'add-user'| 'add-customer', queueId?: number, onSuccess?: () => void}) => {
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearch = useDebounce(searchTerm, 500);
   const queryClient = useQueryClient();
 
   const addUserMutation = useMutation({
-    mutationFn: (userId: number) => staffApi.addUserToStaff(userId.toString()),
+    ...(action === "add-user"
+      ? {
+          mutationFn: (userId: number) =>
+            staffApi.addUserToStaff(userId.toString()),
+        }
+      : {
+          mutationFn: (userId: number) =>
+            queueApi.addCustomerToQueue(queueId!, userId),
+        }),
     onSuccess: () => {
-      toast.success("User added to staff successfully");
+      toast.success("User added successfully");
       setSearchTerm("");
-      queryClient.invalidateQueries({ queryKey: ["staffs"] });
+      action === "add-user" && queryClient.invalidateQueries({ queryKey: ["staffs"] });
+      action === "add-customer" && queryClient.invalidateQueries({ queryKey: ['customers-queue', queueId] });
+      action === "add-customer" && onSuccess?.();
     },
     onError: (error: any) => {
-      toast.error(error?.response?.data?.message || "Failed to add user to staff");
+      toast.error(error?.response?.data?.message || "Failed to add user");
     },
   });
 

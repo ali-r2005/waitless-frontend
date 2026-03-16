@@ -36,5 +36,10 @@ export const queueApi = {
     markAsLate: async (queueUserId: number) => {
         const response = await api.put(`/queues/queue-users/${queueUserId}/mark-late`);
         return response.data;
+    },
+
+    addCustomerToQueue: async (queueId: number, userId: number) => {
+        const response = await api.post(`/queues/${queueId}/users/${userId}`);
+        return response.data;
     }
 }

@@ -77,7 +77,7 @@ export const CustomersQueueTable = ({
                         </TableRow>
                     ) : (
                         customers.map((customer) => (
-                            <TableRow key={customer.id} className="hover:bg-muted/30 transition-colors">
+                            <TableRow key={customer.pivot.id} className="hover:bg-muted/30 transition-colors">
                                 <TableCell className="font-medium text-primary">
                                     #{customer.pivot.ticket_number}
                                 </TableCell>

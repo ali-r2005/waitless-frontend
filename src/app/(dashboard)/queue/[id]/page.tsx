@@ -3,8 +3,7 @@
 import { useState } from "react";
 import { useParams } from 'next/navigation';
 import CustomersQueueList from '@/features/QueueManagement/components/CustomersQueueList';
-import { CreateQueue } from "@/features/QueueManagement/components/CreateQueue";
-import { UpdateQueue } from "@/features/QueueManagement/components/UpdateQueue";
+import { UserSearch } from "@/features/BusinessManagement/componenets/UserSearch";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Plus } from "lucide-react";
@@ -30,17 +29,17 @@ export default function QueuePage() {
       </div>
 
       <div className="w-full">
-        <CustomersQueueList queueId={queueId as string} />
+        <CustomersQueueList queueId={Number(queueId)} />
       </div>
 
-      {/* Create Queue Dialog */}
+      {/* add customer dialog */}
       <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
         <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
             <DialogTitle className="text-2xl font-semibold">Create New Queue</DialogTitle>
             <DialogDescription>Fill out the details below to add a new queue to your system.</DialogDescription>
           </DialogHeader>
-          <CreateQueue onSuccess={() => setIsCreateOpen(false)} />
+          <UserSearch action="add-customer" queueId={Number(queueId)} onSuccess={() => setIsCreateOpen(false)} />
         </DialogContent>
       </Dialog>
 

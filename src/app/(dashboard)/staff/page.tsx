@@ -17,7 +17,7 @@ export default function StaffPage() {
           <StaffList />
         </div>
         <div>
-          <UserSearch />
+          <UserSearch action="add-user"/>
         </div>
       </div>
     </div>
