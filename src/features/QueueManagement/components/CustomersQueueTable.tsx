@@ -82,7 +82,7 @@ export const CustomersQueueTable = ({
                                     #{customer.pivot.ticket_number}
                                 </TableCell>
                                 <TableCell className="font-medium">
-                                    {customer.pivot.position}
+                                    {customer.pivot.position || 'N/A'}
                                 </TableCell>
                                 <TableCell>
                                     <div className="font-medium">{customer.name}</div>
@@ -114,7 +114,7 @@ export const CustomersQueueTable = ({
                                                 
                                                 {customer.pivot.status !== 'late' && customer.pivot.status !== 'served' && customer.pivot.status !== 'cancelled' && (
                                                     <DropdownMenuItem 
-                                                        onClick={() => onMarkAsLate(customer.id)}
+                                                        onClick={() => onMarkAsLate(customer.pivot.id)}
                                                         disabled={isMarkingAsLatePending}
                                                         className="text-amber-600 focus:text-amber-600 focus:bg-amber-50 dark:focus:bg-amber-900/20"
                                                     >
@@ -126,7 +126,7 @@ export const CustomersQueueTable = ({
                                                 <AlertDialogDestructive
                                                     title="Remove Customer"
                                                     description={`Are you sure you want to remove ${customer.name} from the queue? This action cannot be undone.`}
-                                                    onAction={() => onRemove(customer.id)}
+                                                    onAction={() => onRemove(customer.pivot.id)}
                                                 >
                                                     <DropdownMenuItem 
                                                         onSelect={(e) => e.preventDefault()}

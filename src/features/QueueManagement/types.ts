@@ -1,3 +1,5 @@
+import { QueueCustomerStatus } from "@/types";
+
 export interface Queue {
     id: number;
     name: string;
@@ -28,9 +30,10 @@ export interface CustomerQueue {
     email: string;
     phone: string;
     pivot: {
+        id: number;
         queue_id: number;
         user_id: number;
-        status: string;
+        status: QueueCustomerStatus;
         ticket_number: string;
         served_at: string | null;
         start_serving_at: string | null;

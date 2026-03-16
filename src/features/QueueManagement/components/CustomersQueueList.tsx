@@ -23,9 +23,10 @@ export default function CustomersQueueList({ queueId }: { queueId: string | numb
     });
     
     const customers = data?.data || [];
+    console.log(customers);
 
     const removeMutation = useMutation({
-        mutationFn: (userId: number) => queueApi.removeCustomer(queueId, userId),
+        mutationFn: (queueUserId: number) => queueApi.removeCustomer(queueUserId),
         onSuccess: () => {
             toast.success("Customer removed from queue");
             queryClient.invalidateQueries({ queryKey: ['customers-queue', queueId] });
@@ -36,7 +37,7 @@ export default function CustomersQueueList({ queueId }: { queueId: string | numb
     });
 
     const markAsLateMutation = useMutation({
-        mutationFn: (userId: number) => queueApi.markAsLate(queueId, userId),
+        mutationFn: (queueUserId: number) => queueApi.markAsLate(queueUserId),
         onSuccess: () => {
             toast.success("Customer marked as late");
             queryClient.invalidateQueries({ queryKey: ['customers-queue', queueId] });
@@ -104,8 +105,8 @@ export default function CustomersQueueList({ queueId }: { queueId: string | numb
                         <CustomersQueueTable 
                             customers={customers} 
                             activeTab={activeTab}
-                            onMarkAsLate={(userId) => markAsLateMutation.mutate(userId)}
-                            onRemove={(userId) => removeMutation.mutate(userId)}
+                            onMarkAsLate={(queueUserId) => markAsLateMutation.mutate(queueUserId)}
+                            onRemove={(queueUserId) => removeMutation.mutate(queueUserId)}
                             isMarkingAsLatePending={markAsLateMutation.isPending}
                             isRemovingPending={removeMutation.isPending}
                         />
@@ -115,8 +116,8 @@ export default function CustomersQueueList({ queueId }: { queueId: string | numb
                         <CustomersQueueTable 
                              customers={customers} 
                              activeTab={activeTab}
-                             onMarkAsLate={(userId) => markAsLateMutation.mutate(userId)}
-                             onRemove={(userId) => removeMutation.mutate(userId)}
+                             onMarkAsLate={(queueUserId) => markAsLateMutation.mutate(queueUserId)}
+                             onRemove={(queueUserId) => removeMutation.mutate(queueUserId)}
                              isMarkingAsLatePending={markAsLateMutation.isPending}
                              isRemovingPending={removeMutation.isPending}
                         />

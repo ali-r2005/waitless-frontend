@@ -28,13 +28,13 @@ export const queueApi = {
         return response.data;
     },
 
-    removeCustomer: async (queueId: string | number, userId: number) => {
-        const response = await api.delete(`/queues/${queueId}/users/${userId}`);
+    removeCustomer: async (queueUserId: number) => {
+        const response = await api.delete(`/queues/queue-users/${queueUserId}`);
         return response.data;
     },
 
-    markAsLate: async (queueId: string | number, userId: number) => {
-        const response = await api.patch(`/queues/${queueId}/users/${userId}/late`);
+    markAsLate: async (queueUserId: number) => {
+        const response = await api.put(`/queues/queue-users/${queueUserId}/mark-late`);
         return response.data;
     }
 }

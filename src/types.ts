@@ -4,6 +4,8 @@ export interface Businesse {
     logo?: File;
 }
 
+export type QueueCustomerStatus = 'waiting' | 'late' | 'serving' | 'served' | 'cancelled';
+
 export type Role = 'business_owner' | 'staff' | 'customer';
 
 export interface User {
