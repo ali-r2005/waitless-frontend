@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { queueApi } from "@/features/QueueManagement/services/queue.api";
 
 export default function QueuePage() {
+  const [isServing, setIsServing] = useState(false);
   const params = useParams();
   const queueId = Number(params.id);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -55,14 +56,16 @@ export default function QueuePage() {
           <Button onClick={() => callNextMutation.mutate()} className="shadow-md">
             {callNextMutation.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Call Next Customer"}
           </Button>
-          <Button onClick={() => completeServingMutation.mutate()} className="shadow-md">
-            {completeServingMutation.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Complete Serving"}
-          </Button>
+          {isServing && (
+            <Button onClick={() => completeServingMutation.mutate()} className="shadow-md">
+              {completeServingMutation.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Complete Serving"}
+            </Button>
+          )}
         </div>
       </div>
 
       <div className="w-full">
-        <CustomersQueueList queueId={queueId} />
+        <CustomersQueueList queueId={queueId} setIsServing={setIsServing} />
       </div>
 
       {/* add customer dialog */}

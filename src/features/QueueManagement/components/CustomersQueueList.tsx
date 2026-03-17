@@ -14,7 +14,7 @@ import { toast } from "sonner";
 import { CustomersQueueTable } from "./CustomersQueueTable";
 import { CustomerQueue } from "../types";
 
-export default function CustomersQueueList({ queueId }: { queueId: number }) {
+export default function CustomersQueueList({ queueId, setIsServing }: { queueId: number, setIsServing: (isServing: boolean) => void }) {
     const [activeTab, setActiveTab] = useState("waiting");
     const queryClient = useQueryClient();
 
@@ -24,7 +24,8 @@ export default function CustomersQueueList({ queueId }: { queueId: number }) {
     });
     
     const customers: CustomerQueue[] = data?.data || [];
-    console.log(customers);
+    const isServing = customers.some((customer) => customer.pivot.status === "serving");
+    setIsServing(isServing);
 
     const removeMutation = useMutation({
         mutationFn: (queueUserId: number) => queueApi.removeCustomer(queueUserId),
