@@ -41,5 +41,15 @@ export const queueApi = {
     addCustomerToQueue: async (queueId: number, userId: number) => {
         const response = await api.post(`/queues/${queueId}/users/${userId}`);
         return response.data;
+    },
+
+    callNextCustomer: async (queueId: number) => {
+        const response = await api.put(`/queues/${queueId}/call-next`);
+        return response.data;
+    },
+
+    completeServing: async (queueId: number) => {
+        const response = await api.put(`/queues/${queueId}/complete-serving`);
+        return response.data;
     }
 }

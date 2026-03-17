@@ -12,6 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { CustomersQueueTable } from "./CustomersQueueTable";
+import { CustomerQueue } from "../types";
 
 export default function CustomersQueueList({ queueId }: { queueId: number }) {
     const [activeTab, setActiveTab] = useState("waiting");
@@ -22,7 +23,7 @@ export default function CustomersQueueList({ queueId }: { queueId: number }) {
         queryFn: () => queueApi.getCustomersQueue(queueId, activeTab === "late"),
     });
     
-    const customers = data?.data || [];
+    const customers: CustomerQueue[] = data?.data || [];
     console.log(customers);
 
     const removeMutation = useMutation({

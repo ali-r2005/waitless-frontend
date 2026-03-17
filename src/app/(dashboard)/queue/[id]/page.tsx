@@ -6,13 +6,40 @@ import CustomersQueueList from '@/features/QueueManagement/components/CustomersQ
 import { UserSearch } from "@/features/BusinessManagement/componenets/UserSearch";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { Plus } from "lucide-react";
+import { Plus, Loader2 } from "lucide-react";
 import { useRequireRole } from "@/hooks/useRequireRole";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { queueApi } from "@/features/QueueManagement/services/queue.api";
 
 export default function QueuePage() {
   const params = useParams();
-  const queueId = params.id;
+  const queueId = Number(params.id);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const queryClient = useQueryClient();
+  
+
+  const callNextMutation = useMutation({
+    mutationFn: () => queueApi.callNextCustomer(queueId),
+    onSuccess: () => {
+      toast.success("Customer called to service");
+      queryClient.invalidateQueries({ queryKey: ['customers-queue', queueId] });
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message || "Failed to call customer");
+    }
+  });
+
+  const completeServingMutation = useMutation({
+    mutationFn: () => queueApi.completeServing(queueId),
+    onSuccess: () => {
+      toast.success("Customer served");
+      queryClient.invalidateQueries({ queryKey: ['customers-queue', queueId] });
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message || "Failed to serve customer");
+    }
+  });
 
   useRequireRole(["staff", "business_owner"]);
 
@@ -25,11 +52,17 @@ export default function QueuePage() {
             <Plus className="mr-2 h-4 w-4" />
             Add Customer to Queue
           </Button>
+          <Button onClick={() => callNextMutation.mutate()} className="shadow-md">
+            {callNextMutation.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Call Next Customer"}
+          </Button>
+          <Button onClick={() => completeServingMutation.mutate()} className="shadow-md">
+            {completeServingMutation.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Complete Serving"}
+          </Button>
         </div>
       </div>
 
       <div className="w-full">
-        <CustomersQueueList queueId={Number(queueId)} />
+        <CustomersQueueList queueId={queueId} />
       </div>
 
       {/* add customer dialog */}
@@ -39,7 +72,7 @@ export default function QueuePage() {
             <DialogTitle className="text-2xl font-semibold">Create New Queue</DialogTitle>
             <DialogDescription>Fill out the details below to add a new queue to your system.</DialogDescription>
           </DialogHeader>
-          <UserSearch action="add-customer" queueId={Number(queueId)} onSuccess={() => setIsCreateOpen(false)} />
+          <UserSearch action="add-customer" queueId={queueId} onSuccess={() => setIsCreateOpen(false)} />
         </DialogContent>
       </Dialog>
 
