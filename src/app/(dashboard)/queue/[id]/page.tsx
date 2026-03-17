@@ -53,9 +53,11 @@ export default function QueuePage() {
             <Plus className="mr-2 h-4 w-4" />
             Add Customer to Queue
           </Button>
-          <Button onClick={() => callNextMutation.mutate()} className="shadow-md">
-            {callNextMutation.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Call Next Customer"}
-          </Button>
+          {!isServing && (
+            <Button onClick={() => callNextMutation.mutate()} className="shadow-md">
+              {callNextMutation.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Call Next Customer"}
+            </Button>
+          )}
           {isServing && (
             <Button onClick={() => completeServingMutation.mutate()} className="shadow-md">
               {completeServingMutation.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Complete Serving"}

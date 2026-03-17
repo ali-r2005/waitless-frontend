@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { queueApi } from "../services/queue.api";
 import {
@@ -25,7 +25,11 @@ export default function CustomersQueueList({ queueId, setIsServing }: { queueId:
     
     const customers: CustomerQueue[] = data?.data || [];
     const isServing = customers.some((customer) => customer.pivot.status === "serving");
-    setIsServing(isServing);
+
+    useEffect(() => {
+        setIsServing(isServing);
+    }, [data, setIsServing]);
+
 
     const removeMutation = useMutation({
         mutationFn: (queueUserId: number) => queueApi.removeCustomer(queueUserId),
