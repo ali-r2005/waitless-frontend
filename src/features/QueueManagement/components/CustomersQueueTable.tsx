@@ -143,7 +143,7 @@ export const CustomersQueueTable = ({
                                                              <DropdownMenuSubContent className="max-h-[300px] overflow-y-auto min-w-[120px]">
                                                                  <DropdownMenuLabel>Choose Position</DropdownMenuLabel>
                                                                  <DropdownMenuSeparator />
-                                                                 {Array.from({ length: positions }, (_, i) => i + 1).map((pos) => (
+                                                                 {Array.from({ length: positions + 1 }, (_, i) => i + 1).map((pos) => (
                                                                      <DropdownMenuItem 
                                                                          key={pos}
                                                                          onClick={() => onReinsert?.(customer.pivot.id, pos)}
