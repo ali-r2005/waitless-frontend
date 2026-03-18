@@ -13,29 +13,39 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuPortal,
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Loader2, UserMinus, Clock, MoreHorizontal } from "lucide-react";
+import { Loader2, UserMinus, Clock, MoreHorizontal, RotateCcw } from "lucide-react";
 import { AlertDialogDestructive } from "@/components/shared/destructive-confirm";
 import { CustomerQueue } from "../types";
 
 interface CustomersQueueTableProps {
+    positions?: number | null;
     customers: CustomerQueue[];
     activeTab: string;
     onMarkAsLate: (userId: number) => void;
     onRemove: (userId: number) => void;
     isMarkingAsLatePending: boolean;
     isRemovingPending: boolean;
+    onReinsert?: (queueUserId: number, position: number) => void;
+    isReinsertingPending?: boolean;
 }
 
 export const CustomersQueueTable = ({
+    positions,
     customers,
     activeTab,
     onMarkAsLate,
     onRemove,
     isMarkingAsLatePending,
-    isRemovingPending
+    isRemovingPending,
+    onReinsert,
+    isReinsertingPending
 }: CustomersQueueTableProps) => {
 
     const getStatusColor = (status: string) => {
@@ -112,7 +122,7 @@ export const CustomersQueueTable = ({
                                                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                                                 <DropdownMenuSeparator />
                                                 
-                                                {customer.pivot.status !== 'late' && customer.pivot.status !== 'served' && customer.pivot.status !== 'cancelled' && (
+                                                {customer.pivot.status !== 'late' && customer.pivot.status !== 'served' && customer.pivot.status !== 'serving' && customer.pivot.status !== 'cancelled' && (
                                                     <DropdownMenuItem 
                                                         onClick={() => onMarkAsLate(customer.pivot.id)}
                                                         disabled={isMarkingAsLatePending}
@@ -121,7 +131,31 @@ export const CustomersQueueTable = ({
                                                         {isMarkingAsLatePending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Clock className="mr-2 h-4 w-4" />}
                                                         <span>Mark as Late</span>
                                                     </DropdownMenuItem>
-                                                )}
+                                                 )}
+                                                 
+                                                 {customer.pivot.status === 'late' && positions && (
+                                                     <DropdownMenuSub>
+                                                         <DropdownMenuSubTrigger className="text-blue-600 focus:text-blue-600 focus:bg-blue-50 dark:focus:bg-blue-900/20">
+                                                             <RotateCcw className="mr-2 h-4 w-4" />
+                                                             <span>Reinsert Customer</span>
+                                                         </DropdownMenuSubTrigger>
+                                                         <DropdownMenuPortal>
+                                                             <DropdownMenuSubContent className="max-h-[300px] overflow-y-auto min-w-[120px]">
+                                                                 <DropdownMenuLabel>Choose Position</DropdownMenuLabel>
+                                                                 <DropdownMenuSeparator />
+                                                                 {Array.from({ length: positions }, (_, i) => i + 1).map((pos) => (
+                                                                     <DropdownMenuItem 
+                                                                         key={pos}
+                                                                         onClick={() => onReinsert?.(customer.pivot.id, pos)}
+                                                                         disabled={isReinsertingPending}
+                                                                     >
+                                                                         Position {pos}
+                                                                     </DropdownMenuItem>
+                                                                 ))}
+                                                             </DropdownMenuSubContent>
+                                                         </DropdownMenuPortal>
+                                                     </DropdownMenuSub>
+                                                 )}
 
                                                 <AlertDialogDestructive
                                                     title="Remove Customer"

@@ -42,6 +42,17 @@ export default function CustomersQueueList({ queueId, setIsServing }: { queueId:
         }
     });
 
+    const reinsertMutation = useMutation({
+        mutationFn: ({queueUserId, position}: {queueUserId: number, position: number}) => queueApi.reinsertCustomer(queueUserId, position),
+        onSuccess: () => {
+            toast.success("Customer reinserted into queue");
+            queryClient.invalidateQueries({ queryKey: ['customers-queue', queueId] });
+        },
+        onError: (error: any) => {
+            toast.error(error?.response?.data?.message || "Failed to reinsert customer");
+        }
+    });
+
     const markAsLateMutation = useMutation({
         mutationFn: (queueUserId: number) => queueApi.markAsLate(queueUserId),
         onSuccess: () => {
@@ -122,10 +133,13 @@ export default function CustomersQueueList({ queueId, setIsServing }: { queueId:
                         <CustomersQueueTable 
                              customers={customers} 
                              activeTab={activeTab}
+                             positions={data?.positions}
                              onMarkAsLate={(queueUserId) => markAsLateMutation.mutate(queueUserId)}
                              onRemove={(queueUserId) => removeMutation.mutate(queueUserId)}
                              isMarkingAsLatePending={markAsLateMutation.isPending}
                              isRemovingPending={removeMutation.isPending}
+                             onReinsert={(queueUserId, position) => reinsertMutation.mutate({queueUserId, position})}
+                             isReinsertingPending={reinsertMutation.isPending}
                         />
                     </TabsContent>
                 </Tabs>

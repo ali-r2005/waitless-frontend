@@ -51,5 +51,10 @@ export const queueApi = {
     completeServing: async (queueId: number) => {
         const response = await api.put(`/queues/${queueId}/complete-serving`);
         return response.data;
+    },
+
+    reinsertCustomer: async (queueUserId: number, position: number) => {
+        const response = await api.put(`/queues/queue-users/${queueUserId}/reinsert`, {position});
+        return response.data;
     }
 }
