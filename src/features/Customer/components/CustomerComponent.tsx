@@ -1,82 +1,93 @@
 "use client";
 
 import { useAuthStore } from "@/store/useAuthStore";
-import { useEffect , useState } from "react";
+import { useEffect, useState } from "react";
 import echo from "@/lib/echo";
+import { CustomerUpdate } from "../types";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 export default function CustomerComponent() {
-    const [customerInfo, setCustomerInfo] = useState({
+    const [customerInfo, setCustomerInfo] = useState<CustomerUpdate>({
+        type: "N/A",
+        receiver_id: 0,
+        queue_id: 0,
+        queue_name: "N/A",
+        ticket_number: "N/A",
+        position: 0,
         status: "N/A",
-        ticketNumber: "N/A",
-        position: "N/A",
-        estimatedTime: "N/A",
     });
 
     const { user } = useAuthStore();
-    console.log(user)
-    console.log('i will us the id to listen to the update of the authenticated user in the specific channel update.id update.',user?.id);
 
-    const handler = (data: any) => {
-        console.log('data from the update channel', data);
+    const handler = (data: { update: CustomerUpdate }) => {
+        setCustomerInfo(data.update);
     }
 
     useEffect(
         () => {
             if (!user?.id) return;
             echo().then((echoInstance) => {
-                console.log('echoInstance', echoInstance);
                 echoInstance.private(`update.${user?.id}`).listen('SendUpdate', handler);
             });
         }, [user]);
 
+    const getStatusVariant = (status: string) => {
+        switch (status.toLowerCase()) {
+            case "serving":
+                return "default";
+            case "waiting":
+                return "secondary";
+            case "late":
+                return "destructive";
+            default:
+                return "outline";
+        }
+    };
+
     return (
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-            <div className="max-w-md w-full">
-                {/* Page title */}
-                <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">
+        <div className="min-h-screen bg-muted/30 flex items-center justify-center p-4">
+            <div className="max-w-md w-full space-y-6">
+                <h1 className="text-3xl font-bold tracking-tight text-center">
                     Customer Overview
                 </h1>
 
-                {/* Info card */}
-                <div className="bg-white rounded-2xl shadow-lg p-6 space-y-4 transition-shadow hover:shadow-xl">
-                    <div className="flex items-center justify-between border-b border-gray-100 pb-3">
-                        <span className="text-gray-600 font-medium">Name</span>
-                        <span className="text-gray-900 font-mono text-lg">
-                            {user?.name}
-                        </span>
-                    </div>
-                    {/* Status */}
-                    <div className="flex items-center justify-between border-b border-gray-100 pb-3">
-                        <span className="text-gray-600 font-medium">Status</span>
-                        <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-800">
-                            {customerInfo.status}
-                        </span>
-                    </div>
+                <Card className="shadow-lg border-none">
+                    <CardHeader className="text-center pb-2">
+                        <CardTitle className="text-2xl font-bold text-primary">
+                            {customerInfo.queue_name}
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4 pt-4">
+                        <div className="flex items-center justify-between border-b pb-3 border-muted/50">
+                            <span className="text-muted-foreground font-medium">Name</span>
+                            <span className="text-foreground font-semibold">
+                                {user?.name}
+                            </span>
+                        </div>
 
-                    {/* Ticket number */}
-                    <div className="flex items-center justify-between border-b border-gray-100 pb-3">
-                        <span className="text-gray-600 font-medium">Ticket number</span>
-                        <span className="text-gray-900 font-mono text-lg">
-                            {customerInfo.ticketNumber}
-                        </span>
-                    </div>
+                        <div className="flex items-center justify-between border-b pb-3 border-muted/50">
+                            <span className="text-muted-foreground font-medium">Status</span>
+                            <Badge variant={getStatusVariant(customerInfo.status)} className="capitalize">
+                                {customerInfo.status}
+                            </Badge>
+                        </div>
 
-                    {/* Position */}
-                    <div className="flex items-center justify-between border-b border-gray-100 pb-3">
-                        <span className="text-gray-600 font-medium">Position</span>
-                        <span className="text-2xl font-bold text-indigo-600">
-                            {customerInfo.position}
-                        </span>
-                    </div>
+                        <div className="flex items-center justify-between border-b pb-3 border-muted/50">
+                            <span className="text-muted-foreground font-medium">Ticket Number</span>
+                            <span className="text-foreground font-mono text-lg font-bold">
+                                {customerInfo.ticket_number}
+                            </span>
+                        </div>
 
-                    {/* Estimated time */}
-                    <div className="flex items-center justify-between">
-                        <span className="text-gray-600 font-medium">Estimated time</span>
-                        <span className="text-gray-900 font-semibold">
-                            {customerInfo.estimatedTime}
-                        </span>
-                    </div>
-                </div>
+                        <div className="flex items-center justify-between">
+                            <span className="text-muted-foreground font-medium">Position</span>
+                            <span className="text-3xl font-bold text-primary">
+                                {customerInfo.position}
+                            </span>
+                        </div>
+                    </CardContent>
+                </Card>
             </div>
         </div>
     );

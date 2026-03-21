@@ -17,6 +17,7 @@ export default async function echo(): Promise<Echo<any>> {
     auth: {
         headers: {
         Authorization: `Bearer ${token}`,
+        Accept: "application/json",
         },
     },
     });
