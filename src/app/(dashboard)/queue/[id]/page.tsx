@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useParams } from 'next/navigation';
 import CustomersQueueList from '@/features/QueueManagement/components/CustomersQueueList';
-import { UserSearch } from "@/features/BusinessManagement/componenets/UserSearch";
+import { UserSearch } from "@/features/BusinessManagement/components/UserSearch";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Plus, Loader2 } from "lucide-react";

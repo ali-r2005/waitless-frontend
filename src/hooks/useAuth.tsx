@@ -13,7 +13,7 @@ export function useAuth() {
   useEffect(() => {
     if (isLoading) return;
     if (!isAuthenticated) {
-      router.replace("/login");
+      router.replace("/auth/login");
     }
   }, [isAuthenticated, isLoading]);
 

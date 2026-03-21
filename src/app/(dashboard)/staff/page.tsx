@@ -1,6 +1,6 @@
 "use client";
-import { StaffList } from "@/features/BusinessManagement/componenets/StaffList";
-import { UserSearch } from "@/features/BusinessManagement/componenets/UserSearch";
+import { StaffList } from "@/features/BusinessManagement/components/StaffList";
+import { UserSearch } from "@/features/BusinessManagement/components/UserSearch";
 import { useRequireRole } from "@/hooks/useRequireRole";
 
 export default function StaffPage() {
