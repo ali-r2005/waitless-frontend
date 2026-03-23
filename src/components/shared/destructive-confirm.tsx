@@ -12,17 +12,24 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Trash2Icon } from "lucide-react"
 
+interface AlertDialogDestructiveProps {
+  children: React.ReactNode;
+  title: string;
+  description: string;
+  onAction: () => void;
+  buttonText?:{
+    cancel?: string;
+    action?: string;
+  } ;
+}
+
 export function AlertDialogDestructive({
   children, 
   title, 
   description, 
-  onAction
-}: {
-  children: React.ReactNode, 
-  title: string, 
-  description: string,
-  onAction: () => void
-}) {
+  onAction,
+  buttonText = {cancel: "Cancel", action: "Delete"}
+}: AlertDialogDestructiveProps) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -39,8 +46,21 @@ export function AlertDialogDestructive({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel variant="outline">Cancel</AlertDialogCancel>
-          <AlertDialogAction variant="destructive" onClick={onAction}>Delete</AlertDialogAction>
+          <AlertDialogCancel 
+            variant="outline" 
+            onClick={(e) => e.stopPropagation()}
+          >
+            {buttonText.cancel}
+          </AlertDialogCancel>
+          <AlertDialogAction 
+            variant="destructive" 
+            onClick={(e) => {
+              e.stopPropagation();
+              onAction();
+            }}
+          >
+            {buttonText.action}
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

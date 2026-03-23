@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { QueueCustomer } from "../types";
 import customerApi from "../services/customer.api";
@@ -16,16 +16,53 @@ import {
     Activity, 
     ChevronRight,
     Search,
-    History
+    History,
+    MoreVertical,
+    Ban,
+    Trash2
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
+import { 
+    DropdownMenu, 
+    DropdownMenuContent, 
+    DropdownMenuItem, 
+    DropdownMenuTrigger,
+    DropdownMenuSeparator
+} from "@/components/ui/dropdown-menu";
+import { AlertDialogDestructive } from "@/components/shared/destructive-confirm";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 
 export default function ListQueues() {
     const [searchQuery, setSearchQuery] = useState("");
+    const queryClient = useQueryClient();
+
     const { data: apiResponse, isLoading, isError } = useQuery<ApiResponse<QueueCustomer[]>>({
         queryKey: ["customer-queues"],
         queryFn: customerApi.getQueues,
+    });
+
+    const cancelMutation = useMutation({
+        mutationFn: (id: number) => customerApi.cancelQueue(id),
+        onSuccess: () => {
+            toast.success("Registration cancelled");
+            queryClient.invalidateQueries({ queryKey: ["customer-queues"] });
+        },
+        onError: (error: any) => {
+            toast.error(error?.response?.data?.message || "Failed to cancel");
+        }
+    });
+
+    const removeMutation = useMutation({
+        mutationFn: (id: number) => customerApi.removeQueue(id),
+        onSuccess: () => {
+            toast.success("History item removed");
+            queryClient.invalidateQueries({ queryKey: ["customer-queues"] });
+        },
+        onError: (error: any) => {
+            toast.error(error?.response?.data?.message || "Failed to remove item");
+        }
     });
 
     if (isLoading) {
@@ -94,24 +131,27 @@ export default function ListQueues() {
                         const active = isActive(status);
 
                         return (
-                            <Link 
+                            <Card 
                                 key={index} 
-                                href={`/customer/${queue.pivot.id}`}
-                                className="block group transition-all duration-200"
-                            >
-                                <Card className={`overflow-hidden border-none shadow-sm hover:shadow-md transition-all duration-300 ${
+                                className={`overflow-hidden border-none shadow-sm hover:shadow-md transition-all duration-300 ${
                                     active 
                                     ? "bg-gradient-to-br from-primary/5 via-primary/[0.02] to-transparent ring-1 ring-primary/20" 
                                     : "bg-card/50"
-                                }`}>
-                                    <CardContent className="p-0">
-                                        <div className="flex flex-col sm:flex-row items-stretch">
-                                            {/* Status Indicator Bar */}
-                                            <div className={`w-1.5 sm:w-2 ${
-                                                active ? "bg-primary animate-pulse" : "bg-muted"
-                                            }`} />
-                                            
-                                            <div className="flex-1 p-6 flex flex-col sm:flex-row justify-between gap-6">
+                                }`}
+                            >
+                                <CardContent className="p-0">
+                                    <div className="flex flex-col sm:flex-row items-stretch">
+                                        {/* Status Indicator Bar */}
+                                        <div className={`w-1.5 sm:w-2 ${
+                                            active ? "bg-primary animate-pulse" : "bg-muted"
+                                        }`} />
+                                        
+                                        <div className="flex-1 flex flex-col sm:flex-row justify-between items-stretch">
+                                            {/* Left side: Main Info (Clickable) */}
+                                            <Link 
+                                                href={`/customer/${queue.pivot.id}`}
+                                                className="flex-1 p-6 flex flex-col sm:flex-row justify-between gap-6 group"
+                                            >
                                                 <div className="space-y-4">
                                                     <div className="flex items-center gap-3">
                                                         <h3 className="text-xl font-semibold group-hover:text-primary transition-colors">
@@ -147,7 +187,61 @@ export default function ListQueues() {
                                                     </div>
                                                 </div>
 
-                                                <div className="flex flex-col justify-between items-end gap-4">
+                                                <div className="flex flex-col justify-end items-end pb-1">
+                                                    <div className="flex items-center text-primary font-medium text-sm group-hover:translate-x-1 transition-transform">
+                                                        View Details
+                                                        <ChevronRight className="h-4 w-4 ml-1" />
+                                                    </div>
+                                                </div>
+                                            </Link>
+
+                                            {/* Right side: Position & Actions (Non-clickable link area) */}
+                                            <div className="p-6 pt-2 sm:pt-6 flex flex-col justify-between items-end gap-4 min-w-[140px] border-t sm:border-t-0 sm:border-l border-muted/30">
+                                                <div className="flex items-center gap-2">
+                                                    <DropdownMenu>
+                                                        <DropdownMenuTrigger asChild>
+                                                            <Button variant="ghost" size="icon" className="h-8 w-8 ml-auto">
+                                                                <MoreVertical className="h-4 w-4" />
+                                                            </Button>
+                                                        </DropdownMenuTrigger>
+                                                        <DropdownMenuContent align="end" className="w-48">
+                                                            {isActive(status) && (
+                                                                <>
+                                                                    <AlertDialogDestructive
+                                                                        title="Cancel Queue Registration?"
+                                                                        description={`You will be removed from ${queue.name}. This cannot be undone.`}
+                                                                        onAction={() => cancelMutation.mutate(queue.pivot.id)}
+                                                                        buttonText={{ action: "Cancel Position", cancel: "Go Back" }}
+                                                                    >
+                                                                        <DropdownMenuItem 
+                                                                            onSelect={(e) => e.preventDefault()} 
+                                                                            className="text-destructive focus:text-destructive"
+                                                                        >
+                                                                            <Ban className="h-4 w-4 mr-2" />
+                                                                            Cancel Position
+                                                                        </DropdownMenuItem>
+                                                                    </AlertDialogDestructive>
+                                                                    <DropdownMenuSeparator />
+                                                                </>
+                                                            )}
+                                                            
+                                                            <AlertDialogDestructive
+                                                                title="Remove from History?"
+                                                                description="This will hide this entry from your history. If you are currently in this queue, you will also be removed."
+                                                                onAction={() => removeMutation.mutate(queue.pivot.id)}
+                                                                buttonText={{ action: "Remove", cancel: "Keep it" }}
+                                                            >
+                                                                <DropdownMenuItem 
+                                                                    onSelect={(e) => e.preventDefault()} 
+                                                                    className="text-destructive focus:text-destructive"
+                                                                >
+                                                                    <Trash2 className="h-4 w-4 mr-2" />
+                                                                    Remove from History
+                                                                </DropdownMenuItem>
+                                                            </AlertDialogDestructive>
+                                                        </DropdownMenuContent>
+                                                    </DropdownMenu>
+
                                                     <div className="text-right">
                                                         <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold mb-1">
                                                             Position
@@ -156,17 +250,12 @@ export default function ListQueues() {
                                                             #{queue.pivot.position}
                                                         </p>
                                                     </div>
-                                                    
-                                                    <div className="flex items-center text-primary font-medium text-sm group-hover:translate-x-1 transition-transform">
-                                                        View Details
-                                                        <ChevronRight className="h-4 w-4 ml-1" />
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </CardContent>
-                                </Card>
-                            </Link>
+                                    </div>
+                                </CardContent>
+                            </Card>
                         );
                     })
                 ) : (
