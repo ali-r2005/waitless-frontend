@@ -6,13 +6,16 @@ import echo from "@/lib/echo";
 import { CustomerUpdate } from "../types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useSearchParams } from "next/navigation";
 
-export default function CustomerComponent() {
+export default function CustomerComponent({ queueId }: { queueId: number }) {
+    const searchParams = useSearchParams();
+    const queueName = searchParams.get("queueName");
     const [customerInfo, setCustomerInfo] = useState<CustomerUpdate>({
         type: "N/A",
         receiver_id: 0,
         queue_id: 0,
-        queue_name: "N/A",
+        queue_name: queueName || "N/A",
         ticket_number: "N/A",
         position: 0,
         status: "N/A",
@@ -28,7 +31,7 @@ export default function CustomerComponent() {
         () => {
             if (!user?.id) return;
             echo().then((echoInstance) => {
-                echoInstance.private(`update.${user?.id}`).listen('SendUpdate', handler);
+                echoInstance.private(`update.${user?.id}.queue.${queueId}`).listen('SendUpdate', handler);
             });
         }, [user]);
 
