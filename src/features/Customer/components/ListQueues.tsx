@@ -96,7 +96,7 @@ export default function ListQueues() {
                         return (
                             <Link 
                                 key={index} 
-                                href={`/customer/queue/${queue.id}?queueName=${encodeURIComponent(queue.name)}`}
+                                href={`/customer/${queue.pivot.id}`}
                                 className="block group transition-all duration-200"
                             >
                                 <Card className={`overflow-hidden border-none shadow-sm hover:shadow-md transition-all duration-300 ${

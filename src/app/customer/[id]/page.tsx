@@ -9,7 +9,7 @@ export default function CustomerQueuePage() {
     return (
         <div>
             <Suspense fallback={<div className="flex items-center justify-center h-screen">Loading...</div>}>
-                <CustomerComponent queueId={parseInt(queueId)} />
+                <CustomerComponent CustomerQueueId={parseInt(queueId)} />
             </Suspense>
         </div>
     );

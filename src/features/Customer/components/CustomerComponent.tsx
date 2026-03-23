@@ -6,22 +6,29 @@ import echo from "@/lib/echo";
 import { CustomerUpdate } from "../types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { useSearchParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import customerApi from "../services/customer.api";
 
-export default function CustomerComponent({ queueId }: { queueId: number }) {
-    const searchParams = useSearchParams();
-    const queueName = searchParams.get("queueName");
-    const [customerInfo, setCustomerInfo] = useState<CustomerUpdate>({
-        type: "N/A",
-        receiver_id: 0,
-        queue_id: 0,
-        queue_name: queueName || "N/A",
-        ticket_number: "N/A",
-        position: 0,
-        status: "N/A",
+export default function CustomerComponent({ CustomerQueueId }: { CustomerQueueId: number }) {
+
+    const { data , isLoading, isError } = useQuery({
+        queryKey: ["customer-queue", CustomerQueueId],
+        queryFn: () => customerApi.getQueueCustomerById(CustomerQueueId),
     });
 
     const { user } = useAuthStore();
+
+    const queueId = data?.queue_id;
+    console.log('customer info',data);
+    const [customerInfo, setCustomerInfo] = useState<CustomerUpdate>({
+        type: "N/A",
+        receiver_id: data?.user_id || user?.id || 0,
+        queue_id: data?.queue_id || 0,
+        queue_name: data?.queue?.name || "N/A",
+        ticket_number: data?.ticket_number || "N/A",
+        position: data?.position || 0,
+        status: data?.status || "N/A",
+    });
 
     const handler = (data: { update: CustomerUpdate }) => {
         setCustomerInfo(data.update);
