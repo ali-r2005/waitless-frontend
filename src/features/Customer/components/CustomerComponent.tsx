@@ -51,6 +51,9 @@ export default function CustomerComponent({ CustomerQueueId }: { CustomerQueueId
 
     // Synchronize API data into local state when it arrives
     useEffect(() => {
+        if (data?.data?.status === "served" || data?.data?.status === "cancelled") {
+            router.push("/customer");
+        }
         if (data) {
             setCustomerInfo({
                 type: "initial",
@@ -65,20 +68,26 @@ export default function CustomerComponent({ CustomerQueueId }: { CustomerQueueId
     }, [data, user?.id]);
 
     const handler = (payload: { update: CustomerUpdate }) => {
+        console.log("updateeee", payload);
         setCustomerInfo(payload.update);
     }
 
-    const queueId = data?.queue_id;
+    const queueId = data?.data?.queue_id;
 
     useEffect(() => {
+        console.log("user", user);
+        console.log('id', user?.id);
+        console.log("queueId", queueId);
         if (!user?.id || !queueId) return;
 
         let channel: any;
         
         echo().then((echoInstance) => {
+            console.log("echoInstance", echoInstance); 
             channel = echoInstance.private(`update.${user.id}.queue.${queueId}`)
                 .listen('SendUpdate', handler);
         });
+        console.log("channel", channel);
 
         return () => {
             if (channel) {
@@ -88,7 +97,7 @@ export default function CustomerComponent({ CustomerQueueId }: { CustomerQueueId
     }, [user?.id, queueId]);
 
     const getStatusVariant = (status: string) => {
-        switch (status.toLowerCase()) {
+        switch (status?.toLowerCase()) {
             case "serving": return "default";
             case "waiting": return "secondary";
             case "late": return "destructive";
@@ -96,7 +105,7 @@ export default function CustomerComponent({ CustomerQueueId }: { CustomerQueueId
         }
     };
 
-    const canCancel = ["waiting", "late"].includes(customerInfo.status.toLowerCase());
+    const canCancel = ["waiting", "late"].includes(customerInfo.status?.toLowerCase());
 
     if (isLoading) {
         return (
@@ -183,7 +192,7 @@ export default function CustomerComponent({ CustomerQueueId }: { CustomerQueueId
                                 <Activity className="h-4 w-4" />
                                 <span>Current Status</span>
                             </div>
-                            <Badge variant={getStatusVariant(customerInfo.status)} className="capitalize px-4 py-0.5 font-bold shadow-sm">
+                            <Badge variant={getStatusVariant(customerInfo.status) } className="capitalize px-4 py-0.5 font-bold shadow-sm">
                                 {customerInfo.status}
                             </Badge>
                         </div>

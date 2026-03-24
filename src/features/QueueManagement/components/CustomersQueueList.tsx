@@ -22,6 +22,7 @@ export default function CustomersQueueList({ queueId, setIsServing }: { queueId:
         queryKey: ['customers-queue', queueId, activeTab],
         queryFn: () => queueApi.getCustomersQueue(queueId, activeTab === "late"),
     });
+    console.log("data", data);
     
     const customers: CustomerQueue[] = data?.data || [];
     const isServing = customers.some((customer) => customer.pivot.status === "serving");
