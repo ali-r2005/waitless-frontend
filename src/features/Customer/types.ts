@@ -1,11 +1,11 @@
 export interface CustomerUpdate {
-    type: string;
-    receiver_id: number;
-    queue_id: number;
+    queue_state?: string | null;
+    is_paused: 0 | 1;
     queue_name: string;
     ticket_number: string;
     position: number;
     status: string;
+    estimated_waiting_time: string;
 }
 
 export interface QueueCustomer {
