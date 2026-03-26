@@ -27,3 +27,10 @@ export interface QueueCustomer {
         position: number;
     }
 }
+
+type EventActions = "added" | "removed";
+
+export interface ActionPayload {
+    action: EventActions;
+    message: string;
+}

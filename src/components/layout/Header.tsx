@@ -17,10 +17,11 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { useNotificationStore } from "@/store/useNotificationStore";
 
 export default function Header() {
   const { user, isAuthenticated, clearAuth } = useAuthStore();
-  const [notifications, setNotifications] = useState<any[]>([]);
+  const { notifications, clearNotifications } = useNotificationStore();
   const router = useRouter();
 
   const handleLogout = () => {
@@ -28,26 +29,6 @@ export default function Header() {
     router.push("/auth/login");
   };
 
-  useEffect(() => {
-    if (!isAuthenticated || !user?.id) return;
-
-    let channel: any;
-    echo().then((echoInstance) => {
-      channel = echoInstance.private(`App.Models.User.${user.id}`)
-        .notification((notification: any) => {
-          console.log("New Notification:", notification);
-          setNotifications((prev) => [notification, ...prev]);
-        });
-    });
-
-    return () => {
-      if (channel) {
-        // For notification channels, we typically leave the channel
-        // but if stopListening worked for the user, we can try to find the right cleanup
-        // echoInstance.leave(`App.Models.User.${user.id}`) is usually safer.
-      }
-    };
-  }, [user?.id, isAuthenticated]);
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
@@ -134,7 +115,7 @@ export default function Header() {
                       variant="ghost" 
                       size="sm" 
                       className="text-[10px] h-6 px-2"
-                      onClick={() => setNotifications([])}
+                      onClick={() => clearNotifications()}
                     >
                       Clear All
                     </Button>
@@ -145,8 +126,8 @@ export default function Header() {
                   {notifications.length > 0 ? (
                     notifications.map((n, i) => (
                       <DropdownMenuItem key={i} className="flex flex-col items-start p-3 gap-1">
-                        <p className="text-sm font-medium">{n.title || "New Update"}</p>
-                        <p className="text-xs text-muted-foreground">{n.message}</p>
+                        <p className="text-sm font-medium">{n || "New Update"}</p>
+                        <p className="text-xs text-muted-foreground">{n}</p>
                       </DropdownMenuItem>
                     ))
                   ) : (
