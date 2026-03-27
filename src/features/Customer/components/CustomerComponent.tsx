@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { AlertDialogDestructive } from "@/components/shared/destructive-confirm";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import useActionsHook from "../hooks/useActionsHook";   
 
 export default function CustomerComponent({ CustomerQueueId }: { CustomerQueueId: number }) {
     const { user } = useAuthStore();
@@ -38,6 +39,8 @@ export default function CustomerComponent({ CustomerQueueId }: { CustomerQueueId
             toast.error(error?.response?.data?.message || "Failed to cancel queue");
         }
     });
+
+    useActionsHook();
 
     const [customerInfo, setCustomerInfo] = useState<CustomerUpdate>({
         queue_state: null,

@@ -13,6 +13,7 @@ import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { CustomersQueueTable } from "./CustomersQueueTable";
 import { CustomerQueue } from "../types";
+import useActionsHook from "../hooks/useActionsHook";
 
 export default function CustomersQueueList({ queueId, setIsServing }: { queueId: number, setIsServing: (isServing: boolean) => void }) {
     const [activeTab, setActiveTab] = useState("waiting");
@@ -22,7 +23,8 @@ export default function CustomersQueueList({ queueId, setIsServing }: { queueId:
         queryKey: ['customers-queue', queueId, activeTab],
         queryFn: () => queueApi.getCustomersQueue(queueId, activeTab === "late"),
     });
-    console.log("data", data);
+    
+    useActionsHook(queueId);
     
     const customers: CustomerQueue[] = data?.data || [];
     const isServing = customers.some((customer) => customer.pivot.status === "serving");

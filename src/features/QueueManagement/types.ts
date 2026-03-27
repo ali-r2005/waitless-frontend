@@ -48,3 +48,11 @@ export interface ApiResponse<T> {
     positions: number | null;
     pagination?: PaginationMeta;
 }
+
+
+type EventActions = "removed";
+
+export interface ActionPayload {
+    action: EventActions;
+    message: string;
+}

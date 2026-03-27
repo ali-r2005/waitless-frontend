@@ -28,7 +28,7 @@ export interface QueueCustomer {
     }
 }
 
-type EventActions = "added" | "removed";
+type EventActions = "added" | "removed" | "call" | "served";
 
 export interface ActionPayload {
     action: EventActions;

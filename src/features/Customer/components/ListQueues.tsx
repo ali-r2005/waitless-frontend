@@ -1,11 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useAuthStore } from "@/store/useAuthStore";
-import echo from "@/lib/echo";
 import Link from "next/link";
-import { QueueCustomer, ActionPayload } from "../types";
+import { QueueCustomer } from "../types";
 import customerApi from "../services/customer.api";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -35,11 +33,9 @@ import {
 import { AlertDialogDestructive } from "@/components/shared/destructive-confirm";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { useNotificationStore } from "@/store/useNotificationStore";
+import useActionsHook from "../hooks/useActionsHook";
 
 export default function ListQueues() {
-    const { addNotification } = useNotificationStore();
-    const { user } = useAuthStore();
     const [searchQuery, setSearchQuery] = useState("");
     const queryClient = useQueryClient();
 
@@ -47,6 +43,8 @@ export default function ListQueues() {
         queryKey: ["customer-queues"],
         queryFn: customerApi.getQueues,
     });
+
+    useActionsHook();
 
     const cancelMutation = useMutation({
         mutationFn: (id: number) => customerApi.cancelQueue(id),
@@ -69,28 +67,6 @@ export default function ListQueues() {
             toast.error(error?.response?.data?.message || "Failed to remove item");
         }
     });
-
-    function handler(payload: ActionPayload) {
-        if (payload.action === "added" || payload.action === "removed") {
-            addNotification(payload.message);
-            queryClient.invalidateQueries({ queryKey: ["customer-queues"] });
-        }
-    }
-
-    useEffect(() => {
-            let channel: any;
-            
-            echo().then((echoInstance) => { 
-                channel = echoInstance.private(`action.${user?.id}`)
-                    .listen('SendActions', handler);
-            });
-    
-            return () => {
-                if (channel) {
-                    channel.stopListening('SendActions');
-                }
-            };
-        }, [user]);
 
     if (isLoading) {
         return (
