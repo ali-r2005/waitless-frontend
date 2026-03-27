@@ -46,16 +46,16 @@ export default function ListQueues() {
 
     useActionsHook();
 
-    const cancelMutation = useMutation({
-        mutationFn: (id: number) => customerApi.cancelQueue(id),
-        onSuccess: () => {
-            toast.success("Registration cancelled");
-            queryClient.invalidateQueries({ queryKey: ["customer-queues"] });
-        },
-        onError: (error: any) => {
-            toast.error(error?.response?.data?.message || "Failed to cancel");
-        }
-    });
+    // const cancelMutation = useMutation({
+    //     mutationFn: (id: number) => customerApi.cancelQueue(id),
+    //     onSuccess: () => {
+    //         toast.success("Registration cancelled");
+    //         queryClient.invalidateQueries({ queryKey: ["customer-queues"] });
+    //     },
+    //     onError: (error: any) => {
+    //         toast.error(error?.response?.data?.message || "Failed to cancel");
+    //     }
+    // });
 
     const removeMutation = useMutation({
         mutationFn: (id: number) => customerApi.removeQueue(id),
@@ -208,7 +208,7 @@ export default function ListQueues() {
                                                             </Button>
                                                         </DropdownMenuTrigger>
                                                         <DropdownMenuContent align="end" className="w-48">
-                                                            {isActive(status) && (
+                                                            {/* {isActive(status) && (
                                                                 <>
                                                                     <AlertDialogDestructive
                                                                         title="Cancel Queue Registration?"
@@ -226,7 +226,7 @@ export default function ListQueues() {
                                                                     </AlertDialogDestructive>
                                                                     <DropdownMenuSeparator />
                                                                 </>
-                                                            )}
+                                                            )} */}
                                                             
                                                             <AlertDialogDestructive
                                                                 title="Remove from History?"

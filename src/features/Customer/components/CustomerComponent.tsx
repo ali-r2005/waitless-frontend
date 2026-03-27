@@ -28,7 +28,7 @@ export default function CustomerComponent({ CustomerQueueId }: { CustomerQueueId
     });
 
     const cancelMutation = useMutation({
-        mutationFn: () => customerApi.cancelQueue(CustomerQueueId),
+        mutationFn: () => customerApi.removeQueue(CustomerQueueId),
         onSuccess: () => {
             toast.success("Queue registration cancelled");
             queryClient.invalidateQueries({ queryKey: ["customer-queue", CustomerQueueId] });
