@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import ModeToggle from "@/components/shared/mode-toggle";
 import { Clock, Bell, User as UserIcon, LogOut, Settings, Activity } from "lucide-react";
 import { useAuthStore } from "@/store/useAuthStore";
@@ -34,8 +35,12 @@ export default function Header() {
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-2">
           <Link href="/" className="flex items-center gap-2">
-            <Clock className="h-6 w-6 text-primary" />
-            <span className="text-xl font-semibold">Waitless</span>
+            <img 
+              src="/logo.png" 
+              alt="Waitless Logo" 
+              className="h-50 w-50 object-contain"
+            />
+            
           </Link>
         </div>
 
