@@ -11,6 +11,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { queueApi } from "@/features/QueueManagement/services/queue.api";
 import useQueueStore from "../store/useQueueStore";
+import { Card, CardContent } from "@/components/ui/card";
+import { formatWaitingTime } from "@/lib/utils";
 
 export default function QueueManagement() {
   const { isServing, queue } = useQueueStore();
@@ -47,14 +49,27 @@ export default function QueueManagement() {
       <div className="flex items-center justify-between space-y-2">
         <h1 className="text-3xl md:text-4xl text-primary font-bold tracking-tight">{queue?.name || "Queue Management"}</h1>
         <div className="flex items-center space-x-2">
-          <Button onClick={() => setIsCreateOpen(true)} className="shadow-md">
-            <Plus className="mr-2 h-4 w-4" />
-            Add Customer to Queue
-          </Button>
-            <Button onClick={() => isServing ? completeServingMutation.mutate() : callNextMutation.mutate() } className="shadow-md">
-              {callNextMutation.isPending || completeServingMutation.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : (isServing ? "Complete Serving" : "Call Next Customer")}
-            </Button>
+          <Card className="min-w-[120px] shadow-sm hover:shadow-md transition-shadow py-0">
+            <CardContent className="p-4 flex flex-col items-start gap-1">
+              <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/80">
+                Avg Wait
+              </span>
+              <span className="text-3xl font-black text-primary tracking-tight tabular-nums">
+                {formatWaitingTime(queue?.average_waiting_time)}
+              </span>
+            </CardContent>
+          </Card>
         </div>
+      </div>
+
+      <div className="flex items-center space-x-2">
+        <Button onClick={() => setIsCreateOpen(true)} className="shadow-md">
+          <Plus className="mr-2 h-4 w-4" />
+          Add Customer to Queue
+        </Button>
+        <Button onClick={() => isServing ? completeServingMutation.mutate() : callNextMutation.mutate()} className="shadow-md">
+          {callNextMutation.isPending || completeServingMutation.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : (isServing ? "Complete Serving" : "Call Next Customer")}
+        </Button>
       </div>
 
       <div className="w-full">

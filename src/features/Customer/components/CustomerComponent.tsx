@@ -4,6 +4,7 @@ import { useAuthStore } from "@/store/useAuthStore";
 import { useEffect, useState } from "react";
 import echo from "@/lib/echo";
 import { CustomerUpdate } from "../types";
+import { formatWaitingTime } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -233,22 +234,7 @@ export default function CustomerComponent({ CustomerQueueId }: { CustomerQueueId
                             </div>
                             <span className="text-foreground font-bold flex items-center gap-1">
                                 <Clock className="h-3 w-3 text-primary" />
-                                {(() => {
-                                    const seconds = parseInt(customerInfo.estimated_waiting_time);
-                                    if (isNaN(seconds)) return customerInfo.estimated_waiting_time;
-                                    
-                                    if (seconds < 60) return `${seconds}s`;
-                                    
-                                    const h = Math.floor(seconds / 3600);
-                                    const m = Math.floor((seconds % 3600) / 60);
-                                    const s = seconds % 60;
-                                    
-                                    return [
-                                        h > 0 ? `${h}h` : null,
-                                        m > 0 ? `${m}m` : null,
-                                        s > 0 ? `${s}s` : null
-                                    ].filter(Boolean).join(" ");
-                                })()}
+                                {formatWaitingTime(customerInfo.estimated_waiting_time)}
                             </span>
                         </div>
 
