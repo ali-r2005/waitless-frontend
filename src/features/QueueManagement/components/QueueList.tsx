@@ -109,12 +109,12 @@ export const QueueList = ({ onEdit }: QueueListProps) => {
           </div>
         ) : (
           <div className="space-y-4">
-            <ul className="divide-y border rounded-md">
+            <ul className="space-y-4">
               {queues.length > 0 ? (
                 queues.map((queue) => (
                   <li 
                     key={queue.id} 
-                    className="p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center group cursor-pointer hover:bg-muted/50 transition-colors"
+                    className="p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center group cursor-pointer hover:bg-muted/40 transition-all border rounded-xl shadow-sm hover:shadow-md"
                     onClick={() => router.push(`/queue/${queue.id}`)}
                   >
                     <div className="flex flex-col mb-2 sm:mb-0">
