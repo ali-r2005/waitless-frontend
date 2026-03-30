@@ -45,6 +45,7 @@ export interface CustomerQueue {
 export interface ApiResponse<T> {
     status: string;
     data: T;
+    queue: Queue;
     positions: number | null;
     pagination?: PaginationMeta;
 }

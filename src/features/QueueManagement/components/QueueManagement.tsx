@@ -10,9 +10,10 @@ import { Plus, Loader2 } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { queueApi } from "@/features/QueueManagement/services/queue.api";
+import useQueueStore from "../store/useQueueStore";
 
 export default function QueueManagement() {
-  const [isServing, setIsServing] = useState(false);
+  const { isServing, queue } = useQueueStore();
   const params = useParams();
   const queueId = Number(params.id);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -44,7 +45,7 @@ export default function QueueManagement() {
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
       <div className="flex items-center justify-between space-y-2">
-        <h2 className="text-3xl font-bold tracking-tight">Queue Management</h2>
+        <h1 className="text-3xl md:text-4xl text-primary font-bold tracking-tight">{queue?.name || "Queue Management"}</h1>
         <div className="flex items-center space-x-2">
           <Button onClick={() => setIsCreateOpen(true)} className="shadow-md">
             <Plus className="mr-2 h-4 w-4" />
@@ -57,7 +58,7 @@ export default function QueueManagement() {
       </div>
 
       <div className="w-full">
-        <CustomersQueueList queueId={queueId} setIsServing={setIsServing} />
+        <CustomersQueueList queueId={queueId} />
       </div>
 
       {/* add customer dialog */}

@@ -15,7 +15,7 @@ export default function QueuesPage() {
   return (
     <div className="w-full max-w-[1600px] mx-auto space-y-4 px-4 md:px-8 lg:px-12 py-6">
       <div className="flex items-center justify-between space-y-2">
-        <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Queue Management</h2>
+        <h1 className="text-3xl md:text-4xl font-bold tracking-tight">Queue Management</h1>
         <div className="flex items-center space-x-2">
           <Button size="lg" onClick={() => setIsCreateOpen(true)} className="shadow-md">
             <Plus className="mr-2 h-4 w-4" />

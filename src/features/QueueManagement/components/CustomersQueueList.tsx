@@ -14,10 +14,12 @@ import { toast } from "sonner";
 import { CustomersQueueTable } from "./CustomersQueueTable";
 import { CustomerQueue } from "../types";
 import useActionsHook from "../hooks/useActionsHook";
+import useQueueStore from "../store/useQueueStore"; 
 
-export default function CustomersQueueList({ queueId, setIsServing }: { queueId: number, setIsServing: (isServing: boolean) => void }) {
+export default function CustomersQueueList({ queueId }: { queueId: number }) {
     const [activeTab, setActiveTab] = useState("waiting");
     const queryClient = useQueryClient();
+    const { setIsServing, setQueue } = useQueueStore();
 
     const { data, isLoading, isError, error } = useQuery({
         queryKey: ['customers-queue', queueId, activeTab],
@@ -27,11 +29,11 @@ export default function CustomersQueueList({ queueId, setIsServing }: { queueId:
     useActionsHook(queueId);
     
     const customers: CustomerQueue[] = data?.data || [];
-    const isServing = customers.some((customer) => customer.pivot.status === "serving");
 
     useEffect(() => {
-        setIsServing(isServing);
-    }, [data, setIsServing]);
+        setIsServing(customers.some((customer) => customer.pivot.status === "serving"));
+        setQueue(data?.queue || null);
+    }, [ data, setIsServing, setQueue ]);
 
 
     const removeMutation = useMutation({
