@@ -43,7 +43,7 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 :root {
-  --radius: 0.25rem;
+  --radius: 0.50rem;
 
   /* Base */
   --background: oklch(1 0 0);
@@ -57,7 +57,7 @@
   --popover-foreground: oklch(0.15 0 0);
 
   /* Primary brand */
-  --primary: oklch(0.55 0.15 260);
+  --primary: oklch(0.5112 0.2092 260.13);
   --primary-foreground: oklch(0.98 0 0);
 
   /* Secondary accent */

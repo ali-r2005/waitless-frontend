@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { queueApi } from "../services/queue.api";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,13 +15,29 @@ interface QueueListProps {
 }
 
 export const QueueList = ({ onEdit }: QueueListProps) => {
-  const [currentPage, setCurrentPage] = useState(1);
   const queryClient = useQueryClient();
   const router = useRouter();
+  const observerRef = useRef<IntersectionObserver | null>(null);
 
-  const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['queues', currentPage],
-    queryFn: () => queueApi.getQueues(currentPage),
+  const {
+    data,
+    isLoading,
+    isError,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey: ["queues"],
+    queryFn: ({ pageParam = 1 }) => queueApi.getQueues(pageParam),
+    getNextPageParam: (lastPage) => {
+      const pagination = lastPage.pagination;
+      if (!pagination) return undefined;
+      return pagination.current_page < pagination.last_page
+        ? pagination.current_page + 1
+        : undefined;
+    },
+    initialPageParam: 1,
   });
 
   const deleteMutation = useMutation({
@@ -35,13 +51,40 @@ export const QueueList = ({ onEdit }: QueueListProps) => {
     },
   });
 
-  const queues = data?.data || [];
-  const pagination = data?.pagination;
+  // Sentinel ref callback for IntersectionObserver
+  const sentinelRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      if (isFetchingNextPage) return;
+      if (observerRef.current) observerRef.current.disconnect();
+
+      observerRef.current = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting && hasNextPage) {
+            fetchNextPage();
+          }
+        },
+        { threshold: 0.1 }
+      );
+
+      if (node) observerRef.current.observe(node);
+    },
+    [isFetchingNextPage, hasNextPage, fetchNextPage]
+  );
+
+  // Cleanup observer on unmount
+  useEffect(() => {
+    return () => {
+      if (observerRef.current) observerRef.current.disconnect();
+    };
+  }, []);
+
+  const queues = data?.pages.flatMap((page) => page.data) || [];
+  const totalQueues = data?.pages[0]?.pagination?.total;
 
   if (isError) {
     toast.error("Failed to load queues");
     return (
-      <Card className="w-full">
+      <Card className="w-full border-none shadow-none">
         <CardContent className="py-10 text-center text-red-500">
           Error: {(error as any)?.message || "Something went wrong"}
         </CardContent>
@@ -50,9 +93,14 @@ export const QueueList = ({ onEdit }: QueueListProps) => {
   }
 
   return (
-    <Card className="w-full">
-      <CardHeader>
+    <Card className="w-full border-none shadow-none">
+      <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>Manage Queues</CardTitle>
+        {totalQueues !== undefined && (
+          <span className="text-sm text-muted-foreground">
+            {queues.length} of {totalQueues} queues
+          </span>
+        )}
       </CardHeader>
       <CardContent>
         {isLoading ? (
@@ -123,33 +171,12 @@ export const QueueList = ({ onEdit }: QueueListProps) => {
               )}
             </ul>
 
-            {pagination && (
-              <div className="flex items-center justify-between gap-2 py-4">
-                <div className="text-sm text-muted-foreground">
-                  Showing {pagination.from ?? 0} to {pagination.to ?? 0} of {pagination.total} queues
-                </div>
-                
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    disabled={currentPage === 1 || isLoading}
-                    onClick={() => setCurrentPage((prev) => prev - 1)}
-                  >
-                    Previous
-                  </Button>
-                  
-                  <span className="flex items-center px-4 text-sm font-medium">
-                    Page {pagination.current_page} of {pagination.last_page}
-                  </span>
-
-                  <Button
-                    variant="outline"
-                    disabled={currentPage === pagination.last_page || isLoading}
-                    onClick={() => setCurrentPage((prev) => prev + 1)}
-                  >
-                    Next
-                  </Button>
-                </div>
+            {/* Infinite scroll sentinel */}
+            {hasNextPage && (
+              <div ref={sentinelRef} className="flex justify-center py-4">
+                {isFetchingNextPage && (
+                  <Loader2 className="animate-spin h-5 w-5 text-primary" />
+                )}
               </div>
             )}
           </div>

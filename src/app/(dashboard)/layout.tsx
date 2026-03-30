@@ -5,7 +5,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main>
+      <main className="flex-1 w-full overflow-hidden">
         <SidebarTrigger />
         {children}
       </main>
