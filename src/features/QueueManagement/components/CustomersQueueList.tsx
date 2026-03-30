@@ -69,27 +69,6 @@ export default function CustomersQueueList({ queueId }: { queueId: number }) {
         }
     });
 
-    if (isLoading) {
-        return (
-            <Card className="w-full">
-                <CardContent className="flex justify-center items-center h-48">
-                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                </CardContent>
-            </Card>
-        );
-    }
-
-    if (isError) {
-        return (
-            <Card className="w-full">
-                <CardContent className="flex justify-center items-center h-48 text-destructive flex-col gap-2">
-                    <p>Failed to load customers.</p>
-                    <p className="text-sm">{(error as Error)?.message}</p>
-                </CardContent>
-            </Card>
-        );
-    }
-
     return (
         <Card className="w-full shadow-sm">
             <CardHeader>
@@ -101,7 +80,7 @@ export default function CustomersQueueList({ queueId }: { queueId: number }) {
                 </div>
             </CardHeader>
             <CardContent>
-                <Tabs defaultValue="waiting" className="w-full" onValueChange={setActiveTab}>
+                <Tabs value={activeTab} className="w-full" onValueChange={setActiveTab}>
                     <div className="flex items-center justify-between mb-4">
                         <TabsList>
                             <TabsTrigger value="waiting" className="relative">
@@ -123,32 +102,45 @@ export default function CustomersQueueList({ queueId }: { queueId: number }) {
                         </TabsList>
                     </div>
 
-                    <TabsContent value="waiting" className="mt-0">
-                        <CustomersQueueTable 
-                            customers={customers} 
-                            activeTab={activeTab}
-                            onMarkAsLate={(queueUserId) => markAsLateMutation.mutate(queueUserId)}
-                            onRemove={(queueUserId) => removeMutation.mutate(queueUserId)}
-                            isMarkingAsLatePending={markAsLateMutation.isPending}
-                            isRemovingPending={removeMutation.isPending}
-                        />
-                    </TabsContent>
-                    
-                    <TabsContent value="late" className="mt-0">
-                        <CustomersQueueTable 
-                             customers={customers} 
-                             activeTab={activeTab}
-                             positions={data?.positions}
-                             onMarkAsLate={(queueUserId) => markAsLateMutation.mutate(queueUserId)}
-                             onRemove={(queueUserId) => removeMutation.mutate(queueUserId)}
-                             isMarkingAsLatePending={markAsLateMutation.isPending}
-                             isRemovingPending={removeMutation.isPending}
-                             onReinsert={(queueUserId, position) => reinsertMutation.mutate({queueUserId, position})}
-                             isReinsertingPending={reinsertMutation.isPending}
-                        />
-                    </TabsContent>
+                    {isLoading ? (
+                        <div className="flex justify-center items-center h-48">
+                            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                        </div>
+                    ) : isError ? (
+                        <div className="flex justify-center items-center h-48 text-destructive flex-col gap-2">
+                            <p>Failed to load customers.</p>
+                            <p className="text-sm">{(error as Error)?.message}</p>
+                        </div>
+                    ) : (
+                        <>
+                            <TabsContent value="waiting" className="mt-0">
+                                <CustomersQueueTable 
+                                    customers={customers} 
+                                    activeTab={activeTab}
+                                    onMarkAsLate={(queueUserId) => markAsLateMutation.mutate(queueUserId)}
+                                    onRemove={(queueUserId) => removeMutation.mutate(queueUserId)}
+                                    isMarkingAsLatePending={markAsLateMutation.isPending}
+                                    isRemovingPending={removeMutation.isPending}
+                                />
+                            </TabsContent>
+                            
+                            <TabsContent value="late" className="mt-0">
+                                <CustomersQueueTable 
+                                     customers={customers} 
+                                     activeTab={activeTab}
+                                     positions={data?.positions}
+                                     onMarkAsLate={(queueUserId) => markAsLateMutation.mutate(queueUserId)}
+                                     onRemove={(queueUserId) => removeMutation.mutate(queueUserId)}
+                                     isMarkingAsLatePending={markAsLateMutation.isPending}
+                                     isRemovingPending={removeMutation.isPending}
+                                     onReinsert={(queueUserId, position) => reinsertMutation.mutate({queueUserId, position})}
+                                     isReinsertingPending={reinsertMutation.isPending}
+                                />
+                            </TabsContent>
+                        </>
+                    )}
                 </Tabs>
             </CardContent>
         </Card>
     );
-}
+}
