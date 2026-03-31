@@ -19,7 +19,7 @@ import useQueueStore from "../store/useQueueStore";
 export default function CustomersQueueList({ queueId }: { queueId: number }) {
     const [activeTab, setActiveTab] = useState("waiting");
     const queryClient = useQueryClient();
-    const { setIsServing, setQueue } = useQueueStore();
+    const { setIsServing, setQueue, setHasCustomers } = useQueueStore();
 
     const { data, isLoading, isError, error } = useQuery({
         queryKey: ['customers-queue', queueId, activeTab],
@@ -32,8 +32,9 @@ export default function CustomersQueueList({ queueId }: { queueId: number }) {
 
     useEffect(() => {
         setIsServing(customers.some((customer) => customer.pivot.status === "serving"));
+        setHasCustomers(customers.length > 0);
         setQueue(data?.queue || null);
-    }, [ data, setIsServing, setQueue ]);
+    }, [ data, setIsServing, setQueue, setHasCustomers, customers.length ]);
 
 
     const removeMutation = useMutation({
