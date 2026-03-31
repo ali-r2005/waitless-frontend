@@ -56,5 +56,25 @@ export const queueApi = {
     reinsertCustomer: async (queueUserId: number, position: number) => {
         const response = await api.put(`/queues/queue-users/${queueUserId}/reinsert`, {position});
         return response.data;
+    },
+
+    activateQueue: async (queueId: number) => {
+        const response = await api.put(`/queues/${queueId}/activate`);
+        return response.data;
+    },
+
+    deactivateQueue: async (queueId: number) => {
+        const response = await api.put(`/queues/${queueId}/deactivate`);
+        return response.data;
+    },
+
+    pauseQueue: async (queueId: number) => {
+        const response = await api.put(`/queues/${queueId}/pause`);
+        return response.data;
+    },
+
+    resumeQueue: async (queueId: number) => {
+        const response = await api.put(`/queues/${queueId}/resume`);
+        return response.data;
     }
 }

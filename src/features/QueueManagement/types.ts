@@ -6,7 +6,8 @@ export interface Queue {
     scheduled_date: string;
     is_active: boolean;
     start_time: string;
-    average_waiting_time : number
+    average_waiting_time : number;
+    is_paused: boolean;
 }
 
 export interface CreateQueueRequest {
