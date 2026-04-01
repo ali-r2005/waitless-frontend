@@ -40,4 +40,9 @@ export const authApi = {
     return response.data as User;
   },
 
+  // async refresh() {
+  //   const response = await api.post("/refresh");
+  //   return response.data;
+  // },
+
 };

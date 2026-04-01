@@ -23,6 +23,7 @@ import { Button } from "@/components/ui/button";
 import { Loader2, UserMinus, Clock, MoreHorizontal, RotateCcw } from "lucide-react";
 import { AlertDialogDestructive } from "@/components/shared/destructive-confirm";
 import { CustomerQueue } from "../types";
+import useQueueStore from "../store/useQueueStore"; 
 
 interface CustomersQueueTableProps {
     positions?: number | null;
@@ -47,6 +48,7 @@ export const CustomersQueueTable = ({
     onReinsert,
     isReinsertingPending
 }: CustomersQueueTableProps) => {
+    const { queue } = useQueueStore();
 
     const getStatusColor = (status: string) => {
         switch (status.toLowerCase()) {
@@ -122,7 +124,7 @@ export const CustomersQueueTable = ({
                                                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                                                 <DropdownMenuSeparator />
                                                 
-                                                {customer.pivot.status !== 'late' && customer.pivot.status !== 'served' && customer.pivot.status !== 'serving' && customer.pivot.status !== 'cancelled' && (
+                                                {customer.pivot.status !== 'late' && customer.pivot.status !== 'served' && customer.pivot.status !== 'serving' && customer.pivot.status !== 'cancelled' && !queue?.is_paused && queue?.is_active && (
                                                     <DropdownMenuItem 
                                                         onClick={() => onMarkAsLate(customer.pivot.id)}
                                                         disabled={isMarkingAsLatePending}

@@ -47,7 +47,7 @@ export default function UnauthorizedPage() {
           onClick={handleLogout}
         >
           <LogOut className="mr-2 h-5 w-5" />
-          Logout & Switch Account
+          Logout
         </Button>
       </div>
 

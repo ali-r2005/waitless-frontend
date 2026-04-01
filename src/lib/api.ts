@@ -22,11 +22,46 @@ api.interceptors.request.use((config) => {
 
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
-    if (error.response.status === 401) {
+  async (error) => {
+    const originalRequest = error.config;
+
+    // If the error is 401 and it's already the retry or the original request was the refresh itself, logout
+    if (error.response?.status === 401 && (originalRequest.url === "/refresh" || originalRequest._retry)) {
       useAuthStore.getState().clearAuth();
       window.location.href = "/auth/login";
+      return Promise.reject(error);
     }
+
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      try {
+        // Use a direct axios call to avoid interceptor loops and circular dependencies
+        const response = await axios.post(`${API_BASE_URL}/refresh`, {}, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        });
+        const data = response.data;
+        
+        const token = data.access_token;
+        const user = data.user || useAuthStore.getState().user;
+
+        // Save the new token
+        useAuthStore.getState().setAuth(user as any, token);
+        localStorage.setItem("token", token);
+
+        // Update the authorization header and replay the original request
+        originalRequest.headers.Authorization = `Bearer ${token}`;
+        return api(originalRequest);
+      } catch (refreshError) {
+        console.log('refreshError', refreshError);
+        // If refresh fails, clear auth and redirect
+        useAuthStore.getState().clearAuth();
+        window.location.href = "/auth/login";
+        return Promise.reject(refreshError);
+      }
+    }
+
     return Promise.reject(error);
   }
 );

@@ -114,9 +114,9 @@ export default function QueueManagement() {
             <Plus className="mr-2 h-4 w-4" />
             Add Customer to Queue
           </Button>
-          {hasCustomers ? (
+          {hasCustomers && queue?.is_active && !queue?.is_paused ? (
             <Button onClick={() => isServing ? completeServingMutation.mutate() : callNextMutation.mutate()} disabled={callNextMutation.isPending || completeServingMutation.isPending || pauseMutation.isPending || !!queue?.is_paused} className="shadow-md" size="lg">
-              {callNextMutation.isPending || completeServingMutation.isPending ? (
+              {callNextMutation.isPending || completeServingMutation.isPending  ? (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               ) : isServing ? (
                 <>

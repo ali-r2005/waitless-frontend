@@ -19,6 +19,7 @@ import { Badge } from "@/components/ui/badge";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useNotificationStore } from "@/store/useNotificationStore";
+import { authApi } from "@/features/auth/services/auth.api";
 
 export default function Header() {
   const { user, isAuthenticated, clearAuth } = useAuthStore();
@@ -26,7 +27,8 @@ export default function Header() {
   const router = useRouter();
 
   const handleLogout = () => {
-    clearAuth();
+    authApi.logout();
+    // clearAuth();
     router.push("/auth/login");
   };
 
