@@ -7,9 +7,6 @@ const api = axios.create({
   baseURL: API_BASE_URL,
 });
 
-console.log('API_BASE_URL', API_BASE_URL);
-
-
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
 
@@ -54,7 +51,6 @@ api.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${token}`;
         return api(originalRequest);
       } catch (refreshError) {
-        console.log('refreshError', refreshError);
         // If refresh fails, clear auth and redirect
         useAuthStore.getState().clearAuth();
         window.location.href = "/auth/login";

@@ -26,10 +26,10 @@ export default function Header() {
   const { notifications, clearNotifications } = useNotificationStore();
   const router = useRouter();
 
-  const handleLogout = () => {
-    authApi.logout();
-    // clearAuth();
-    router.push("/auth/login");
+  const handleLogout = async () => {
+    await authApi.logout();
+    clearAuth();
+    router.replace("/auth/login");
   };
 
   return (
@@ -40,7 +40,7 @@ export default function Header() {
             <img 
               src="/logo.png" 
               alt="Waitless Logo" 
-              className="h-50 w-50 object-contain"
+              className="h-40 w-40 object-contain"
             />
             
           </Link>
