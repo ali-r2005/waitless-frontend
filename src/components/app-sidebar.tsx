@@ -38,12 +38,12 @@ const items = [
 export function AppSidebar() {
   return (
     <Sidebar>
-      <SidebarHeader className="border-b">
-        <Link href="/" className="flex items-center gap-2 px-4">
+      <SidebarHeader className="border-b p-2">
+        <Link href="/" className="flex items-center justify-center">
           <img 
-            src="/logo.png" 
+            src="/logo2.png" 
             alt="Waitless Logo" 
-            className="h-30 w-30 object-contain"
+            className="h-30 w-auto object-contain"
           />
         </Link>
       </SidebarHeader>
