@@ -6,7 +6,7 @@ export const queueApi = {
         const response = await api.post('/queues', data);
         return response.data;
     },
-    getQueues: async (page: number = 1, perPage: number = 5) => {
+    getQueues: async (page: number = 1, perPage: number = 10) => {
         const response = await api.get<ApiResponse<Queue[]>>(`/queues?page=${page}&per_page=${perPage}`);
         return response.data;
     },
