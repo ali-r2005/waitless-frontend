@@ -1,7 +1,8 @@
-export interface Businesse {
-    business_name: string;
+export interface Business {
+    id: number;
+    name: string;
     industry: string;
-    logo?: File;
+    logo?: string;
 }
 
 export type QueueCustomerStatus = 'waiting' | 'late' | 'serving' | 'served' | 'cancelled';

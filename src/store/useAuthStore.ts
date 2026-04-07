@@ -1,12 +1,13 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { User } from '@/types';
+import { User, Business } from '@/types';
 
 interface AuthState {
   user: User | null;
+  business: Business | null;
   token: string | null;
   isAuthenticated: boolean;
-  setAuth: (user: User, token: string) => void;
+  setAuth: (user: User, token: string, business: Business) => void;
   isLoading: boolean;
   clearAuth: () => void;
 }
@@ -16,12 +17,13 @@ export const useAuthStore = create<AuthState>()(
     (set) => ({
       user: null,
       token: null,
+      business: null,
       isAuthenticated: false,
       isLoading: true,
-      setAuth: (user, token) => set({ user, token, isAuthenticated: true, isLoading: false }),
+      setAuth: (user, token, business) => set({ user, token, business, isAuthenticated: true, isLoading: false }),
       clearAuth: () => {
         localStorage.removeItem('token');
-        set({ user: null, token: null, isAuthenticated: false, isLoading: false });
+        set({ user: null, business: null, token: null, isAuthenticated: false, isLoading: false });
       },
     }),
     {

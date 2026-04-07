@@ -22,9 +22,10 @@ import { useNotificationStore } from "@/store/useNotificationStore";
 import { authApi } from "@/features/auth/services/auth.api";
 
 export default function Header() {
-  const { user, isAuthenticated, clearAuth } = useAuthStore();
+  const { user, business, isAuthenticated, clearAuth } = useAuthStore();
+  console.log("user", user);
+  console.log("business", business);
   const { notifications, clearNotifications } = useNotificationStore();
-  const router = useRouter();
 
   const handleLogout = async () => {
     await authApi.logout();
@@ -151,8 +152,22 @@ export default function Header() {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="gap-2 px-2 md:px-3">
-                    <div className="h-7 w-7 rounded-full bg-primary/10 flex items-center justify-center">
-                      <UserIcon className="h-4 w-4 text-primary" />
+                    <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden border">
+                      {business?.name ? (
+                        business.logo ? (
+                          <img 
+                            src={business.logo} 
+                            alt={business.name} 
+                            className="h-full w-full object-cover"
+                          />
+                        ) : (
+                          <span className="text-xs font-bold text-primary">
+                            {business.name.substring(0, 1).toUpperCase()}
+                          </span>
+                        )
+                      ) : (
+                        <UserIcon className="h-4 w-4 text-primary" />
+                      )}
                     </div>
                     <span className="hidden md:inline-flex text-sm font-medium">
                       {user?.name}

@@ -17,8 +17,9 @@ export const useAuth = () => {
     onSuccess: (data) => {
       const token = data.access_token;
       const user = data.user;
+      const business = data.business;
 
-      setAuth(user, token);
+      setAuth(user, token, business);
       localStorage.setItem("token", token);
 
       toast.success("Welcome back!");
@@ -38,8 +39,9 @@ export const useAuth = () => {
       console.log("data of the register mutation", data);
       const token = data.access_token;
       const user = data.user;
+      const business = data.business;
 
-      setAuth(user, token);
+      setAuth(user, token, business);
       localStorage.setItem("token", token);
 
       toast.success("Account created successfully!");

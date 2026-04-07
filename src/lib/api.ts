@@ -41,10 +41,11 @@ api.interceptors.response.use(
         const data = response.data;
         
         const token = data.access_token;
-        const user = data.user || useAuthStore.getState().user;
+        const user = useAuthStore.getState().user;
+        const business = useAuthStore.getState().business;
 
         // Save the new token
-        useAuthStore.getState().setAuth(user as any, token);
+        useAuthStore.getState().setAuth(user as any, token, business as any);
         localStorage.setItem("token", token);
 
         // Update the authorization header and replay the original request
