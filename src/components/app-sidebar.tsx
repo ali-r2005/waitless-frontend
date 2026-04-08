@@ -12,8 +12,9 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
 } from "@/components/ui/sidebar"
-import { Home, Users, Clock, ListOrdered } from "lucide-react"
+import { Home, Users, ListOrdered } from "lucide-react"
 import Link from "next/link"
+import { useAuthStore } from "@/store/useAuthStore"
 
 // Menu items.
 const items = [
@@ -26,6 +27,7 @@ const items = [
     title: "Staff",
     url: "/staff",
     icon: Users,
+    roles: ["business_owner"],
   },
   {
     title: "Queues",
@@ -36,6 +38,15 @@ const items = [
 
 
 export function AppSidebar() {
+  const { user } = useAuthStore();
+
+  const filteredItems = items.filter((item) => {
+    if (item.roles && user?.role) {
+      return item.roles.includes(user.role);
+    }
+    return true;
+  });
+
   return (
     <Sidebar>
       <SidebarHeader className="border-b p-2">
@@ -52,7 +63,7 @@ export function AppSidebar() {
           <SidebarGroupLabel>Business Management</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
+              {filteredItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <Link href={item.url}>

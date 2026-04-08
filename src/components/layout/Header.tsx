@@ -16,7 +16,6 @@ import {
   DropdownMenuTrigger 
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useNotificationStore } from "@/store/useNotificationStore";
 import { authApi } from "@/features/auth/services/auth.api";
@@ -26,6 +25,7 @@ export default function Header() {
   console.log("user", user);
   console.log("business", business);
   const { notifications, clearNotifications } = useNotificationStore();
+  const baseImgUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/storage`;
 
   const handleLogout = async () => {
     await authApi.logout();
@@ -156,7 +156,7 @@ export default function Header() {
                       {business?.name ? (
                         business.logo ? (
                           <img 
-                            src={business.logo} 
+                            src={`${baseImgUrl}/${business.logo}`} 
                             alt={business.name} 
                             className="h-full w-full object-cover"
                           />
