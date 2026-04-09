@@ -1,16 +1,13 @@
 "use client";
 import Profile from "@/features/auth/components/ShowProfile";
-import { useAuthStore } from "@/store/useAuthStore";
 
 export default function ProfilePage() {
-    const { isAuthenticated } = useAuthStore();
-
-    console.log('isAuthenticated', isAuthenticated);
-
     return (
-        <>
-        <Profile />
-        {isAuthenticated && <p>the user is authenticated</p>}
-        </>
+        <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
+            <div className="flex items-center justify-between">
+                <h2 className="text-3xl font-bold tracking-tight">Account Settings</h2>
+            </div>
+            <Profile />
+        </div>
     );
 }
