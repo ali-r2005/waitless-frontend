@@ -13,7 +13,6 @@ export interface Queue {
 export interface CreateQueueRequest {
     name: string;
     scheduled_date?: string;
-    is_active?: boolean;
     start_time?: string;
 }
 

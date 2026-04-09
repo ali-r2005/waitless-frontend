@@ -31,7 +31,6 @@ export const UpdateQueue = ({ queueId, onSuccess }: UpdateQueueProps) => {
       name: "",
       scheduled_date: "",
       start_time: "",
-      is_active: true,
     },
   });
 
@@ -41,7 +40,6 @@ export const UpdateQueue = ({ queueId, onSuccess }: UpdateQueueProps) => {
         name: queueResponse.data.name || "",
         scheduled_date: queueResponse.data.scheduled_date || "",
         start_time: queueResponse.data.start_time || "",
-        is_active: queueResponse.data.is_active ?? true,
       });
     }
   }, [queueResponse, form]);
@@ -115,26 +113,7 @@ export const UpdateQueue = ({ queueId, onSuccess }: UpdateQueueProps) => {
             )}
           />
         </div>
-        <FormField
-          control={form.control}
-          name="is_active"
-          render={({ field }) => (
-            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-              <div className="space-y-0.5">
-                <FormLabel className="text-base text-foreground">Active Status</FormLabel>
-                <div className="text-sm text-muted-foreground">
-                  Enable or disable this queue
-                </div>
-              </div>
-              <FormControl>
-                <Switch
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
-              </FormControl>
-            </FormItem>
-          )}
-        />
+
         <Button type="submit" className="w-full mt-4" disabled={updateMutation.isPending}>
           {updateMutation.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           Update Queue
