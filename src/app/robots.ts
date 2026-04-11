@@ -1,7 +1,8 @@
 import { MetadataRoute } from "next";
+import { APP_URL } from "./app.url";
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = "https://waitless-app.vercel.app"; // Update with your domain
+  const baseUrl = APP_URL;
 
   return {
     rules: {
@@ -12,3 +13,4 @@ export default function robots(): MetadataRoute.Robots {
     sitemap: `${baseUrl}/sitemap.xml`,
   };
 }
+

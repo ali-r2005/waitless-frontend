@@ -4,6 +4,7 @@ import "../globals.css";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { QueryProvider } from "@/components/providers/query-provider";
+import { APP_URL } from "./app.url";
 
 
 const geistSans = Geist({
@@ -17,17 +18,18 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(APP_URL),
   title: {
     default: "Waitless - Modern Queue Management System",
     template: "%s | Waitless",
   },
+  applicationName: "Waitless",
   description:
     "Streamline your business operations with Waitless. Manage queues efficiently for hospitals, clinics, and service centers.",
   keywords: ["queue management", "waiting line", "business efficiency", "customer experience"],
   openGraph: {
     title: "Waitless - Modern Queue Management System",
     description: "Streamline your business operations with Waitless. Manage queues efficiently for hospitals, clinics, and service centers.",
-    url: "https://waitless-app.vercel.app", // Replace with your actual domain
     siteName: "Waitless",
     images: [
       {
@@ -40,6 +42,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     type: "website",
   },
+
   twitter: {
     card: "summary_large_image",
     title: "Waitless | Queue Management",

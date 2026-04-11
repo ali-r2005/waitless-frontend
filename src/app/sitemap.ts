@@ -1,7 +1,8 @@
 import { MetadataRoute } from "next";
+import { APP_URL } from "./app.url";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://waitless-app.vercel.app"; // Replace with your actual domain
+  const baseUrl = APP_URL;
 
   return [
     {
@@ -12,3 +13,4 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 }
+

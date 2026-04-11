@@ -1,0 +1,1 @@
+export const APP_URL = "https://waitless-app.vercel.app";
