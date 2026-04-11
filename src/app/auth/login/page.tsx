@@ -1,6 +1,10 @@
-'use client';
-
+import type { Metadata } from "next";
 import LoginForm from "@/features/auth/components/LoginForm";
+
+export const metadata: Metadata = {
+  title: "Login",
+  description: "Sign in to your Waitless account to manage your business queues and staff transitions.",
+};
 
 export default function LoginPage() {
   return (
@@ -11,3 +15,4 @@ export default function LoginPage() {
     </div>
   );
 }
+

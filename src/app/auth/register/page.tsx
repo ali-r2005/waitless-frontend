@@ -1,6 +1,10 @@
-'use client';
-
+import type { Metadata } from "next";
 import RegisterForm from "@/features/auth/components/RegisterForm";
+
+export const metadata: Metadata = {
+  title: "Register",
+  description: "Create a Waitless account for your business and start managing your queues efficiently today.",
+};
 
 export default function RegisterPage() {
   return (
@@ -11,3 +15,4 @@ export default function RegisterPage() {
     </div>
   );
 }
+

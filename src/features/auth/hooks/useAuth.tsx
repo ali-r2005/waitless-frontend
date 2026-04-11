@@ -45,7 +45,7 @@ export const useAuth = () => {
       localStorage.setItem("token", token);
 
       toast.success("Account created successfully!");
-      router.push("/profile");
+      router.push("/");
     },
 
     onError: (error: any) => {

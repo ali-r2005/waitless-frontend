@@ -12,6 +12,7 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
 } from "@/components/ui/sidebar"
+import { useRouter } from "next/navigation";
 import { Home, Users, ListOrdered, User as UserIcon, LogOut, Settings, Activity, ChevronUp } from "lucide-react"
 import Link from "next/link"
 import { useAuthStore } from "@/store/useAuthStore"
@@ -48,11 +49,13 @@ const items = [
 
 export function AppSidebar() {
   const { user, business, clearAuth } = useAuthStore();
+  const router = useRouter();
   const baseImgUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/storage`;
 
   const handleLogout = async () => {
     await authApi.logout();
     clearAuth();
+    router.push("/");
   };
 
   const filteredItems = items.filter((item) => {
@@ -166,4 +169,4 @@ export function AppSidebar() {
       </SidebarFooter>
     </Sidebar>
   )
-}
+}
