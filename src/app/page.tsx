@@ -22,21 +22,16 @@ import {
 
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import { APP_URL } from "./app.url";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(APP_URL),
   title: "Waitless - Smart Queue Management for Modern Businesses",
   description:
     "Waitless helps you eliminate waiting lines and improve customer satisfaction with real-time queue tracking, SMS alerts, and smart scheduling.",
   keywords: ["queue management", "waiting list", "customer flow", "digital queue", "waitless"],
-  openGraph: {
-    title: "Waitless - Smart Queue Management for Modern Businesses",
-    description: "Eliminate wait times and enhance customer experience with our intelligent queue system.",
-    images: ["/og-image.png"],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Waitless - Start Managing Your Queues Better",
-    images: ["/og-image.png"],
+  alternates: {
+    canonical: "/",
   },
 };
 
