@@ -11,11 +11,14 @@ import Link from 'next/link';
 import { AuthRequest } from '../types';
 import { useState } from 'react';
 import { registerSchema, RegisterFormValues } from '../schemas/auth.shema';
+import { Eye, EyeOff, User, Building2 } from 'lucide-react';
 
 
 export default function RegisterForm() {
   const { register: registerUser, loading } = useAuth();
   const [activeTab, setActiveTab] = useState<'customer' | 'business_owner'>('customer');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   
   const {
     register,
@@ -57,7 +60,7 @@ export default function RegisterForm() {
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto">
+    <Card className="w-full max-w-2xl mx-auto">
       <CardHeader>
         <CardTitle>Create an Account</CardTitle>
         <CardDescription>Join Waitless to start managing your time better</CardDescription>
@@ -73,10 +76,24 @@ export default function RegisterForm() {
         }} 
         className="w-full"
       >
-        <TabsList className="grid w-full grid-cols-2 px-6">
-          <TabsTrigger value="customer">Customer</TabsTrigger>
-          <TabsTrigger value="business_owner">Business Owner</TabsTrigger>
-        </TabsList>
+        <div className="px-6">
+          <TabsList className="grid w-full grid-cols-2 h-12 p-1 bg-muted/50 rounded-lg">
+            <TabsTrigger 
+              value="customer" 
+              className="flex items-center gap-2 data-[state=active]:bg-background data-[state=active]:shadow-sm transition-all h-full"
+            >
+              <User size={16} className="text-primary" />
+              <span>Customer</span>
+            </TabsTrigger>
+            <TabsTrigger 
+              value="business_owner" 
+              className="flex items-center gap-2 data-[state=active]:bg-background data-[state=active]:shadow-sm transition-all h-full"
+            >
+              <Building2 size={16} className="text-primary" />
+              <span>Business Owner</span>
+            </TabsTrigger>
+          </TabsList>
+        </div>
         
         <form onSubmit={handleSubmit(onSubmit)}>
           <CardContent className="space-y-4 pt-6">
@@ -150,23 +167,41 @@ export default function RegisterForm() {
 
             <div className="space-y-2">
               <label className="text-sm font-medium leading-none">Password</label>
-              <Input
-                {...register('password')}
-                type="password"
-                placeholder="••••••••"
-                className={errors.password ? 'border-red-500' : ''}
-              />
+              <div className="relative">
+                <Input
+                  {...register('password')}
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="••••••••"
+                  className={errors.password ? 'border-red-500 pr-10' : 'pr-10'}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
               {errors.password && <p className="text-sm text-red-500">{errors.password.message}</p>}
             </div>
 
             <div className="space-y-2">
               <label className="text-sm font-medium leading-none">Confirm Password</label>
-              <Input
-                {...register('password_confirmation')}
-                type="password"
-                placeholder="••••••••"
-                className={errors.password_confirmation ? 'border-red-500' : ''}
-              />
+              <div className="relative">
+                <Input
+                  {...register('password_confirmation')}
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  placeholder="••••••••"
+                  className={errors.password_confirmation ? 'border-red-500 pr-10' : 'pr-10'}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
               {errors.password_confirmation && <p className="text-sm text-red-500">{errors.password_confirmation.message}</p>}
             </div>
           </CardContent>
